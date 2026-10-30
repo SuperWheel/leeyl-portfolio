@@ -64,185 +64,282 @@
     <section class="section" id="prototype">
       <p class="eyebrow">Prototype</p>
       <h2 class="section-title">交互原型</h2>
-      <p class="prose fa-intro">还原的是系统的「比率分析」页。可以试试：切换上方的<strong>管理层 / 投资人 / 专业全量</strong>视图；把鼠标停在指标卡上查看口径，点击指标卡切换趋势图；点<strong>导入年报</strong>走一遍导入与复核流程。</p>
+      <p class="prose fa-intro">按项目 README 里的真实界面截图和前端源码还原了「比率分析」与「年报导入」两页：左侧深色菜单、白色顶栏、Element Plus 组件和配色都与原系统一致。可以试试：切换<strong>管理层 / 投资人 / 专业全量</strong>视图；鼠标停在指标卡上看口径，点击指标卡高亮对应的重点变动；在左侧菜单进入<strong>年报导入</strong>，上传示例 PDF 或从巨潮检索，走一遍识别、核对与入库。</p>
       <div class="stage">
         <div class="mock-window fa-window" role="region" aria-label="财务分析系统界面示意">
-          <div class="mock-titlebar"><i></i><i></i><i></i><span>财务分析系统 · 比率分析</span></div>
+          <div class="mock-titlebar"><i></i><i></i><i></i><span>财务分析系统 · 127.0.0.1:5173</span></div>
 
           <div class="fa-app" id="fa-app">
-            <aside class="fa-side" aria-label="系统导航">
-              <p class="fa-side-brand">财务分析系统</p>
-              <ul class="fa-nav">
-                <li><button type="button" data-nav="仪表盘">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 13l4-4"/></svg>仪表盘</button></li>
-                <li><button type="button" data-nav="三大报表">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M10 12h5M10 16h5"/></svg>三大报表</button></li>
-                <li><button type="button" data-nav="年报导入" data-open-import>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5M5 20h14"/></svg>年报导入</button></li>
-                <li><button type="button" class="is-active" aria-current="page">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg>比率分析</button></li>
-                <li><button type="button" data-nav="多期对比">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1"/><path d="M9 20h6M9 12v-2M12 12V9M15 12v-3"/></svg>多期对比</button></li>
+            <aside class="fa-aside" aria-label="系统菜单">
+              <div class="fa-logo"><span class="fa-logo-full">财务分析系统</span><span class="fa-logo-mini" aria-hidden="true">财</span></div>
+              <ul class="fa-menu">
+                <li><button type="button" class="fa-menu-item" data-page="dashboard" title="仪表盘">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16a7.5 7.5 0 1 1 15 0"/><path d="M12 16l3.5-4.5"/><circle cx="12" cy="16" r="1.2"/></svg><span>仪表盘</span></button></li>
+                <li><button type="button" class="fa-menu-item" data-page="statements" title="三大报表">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>三大报表</span></button></li>
+                <li><button type="button" class="fa-menu-item" data-page="import" title="年报导入">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 20h14"/></svg><span>年报导入</span></button></li>
+                <li><button type="button" class="fa-menu-item is-active" data-page="analysis" aria-current="page" title="比率分析">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M7 15.5l3.2-3.4 2.8 2.2L17 9.5"/></svg><span>比率分析</span></button></li>
+                <li><button type="button" class="fa-menu-item" data-page="compare" title="多期对比">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1"/><path d="M9 20h6M12 15v5M8.5 11.5V9.5M12 11.5V8M15.5 11.5v-1"/></svg><span>多期对比</span></button></li>
               </ul>
             </aside>
 
-            <div class="fa-main">
-              <div class="fa-pagehead">
-                <h3>比率分析</h3>
+            <div class="fa-container">
+              <header class="fa-header">
+                <span class="fa-header-title" id="fa-header-title">比率分析</span>
                 <span class="fa-demo-badge">示意数据</span>
-              </div>
+              </header>
 
-              <div class="fa-toolbar">
-                <span class="fa-select" aria-label="企业">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
-                <span class="fa-select fa-select-sm" aria-label="报告期">2025 年报<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
-                <span class="fa-chip">数据期 2025 年报 · 完整度 13/13</span>
-                <div class="fa-seg" role="group" aria-label="视图切换">
-                  <button type="button" data-role="manager" aria-pressed="false">管理层</button>
-                  <button type="button" data-role="investor" aria-pressed="true">投资人</button>
-                  <button type="button" data-role="pro" aria-pressed="false">专业全量</button>
-                </div>
-                <button type="button" class="fa-btn fa-btn-primary" id="fa-import-btn" data-open-import>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5M5 20h14"/></svg>导入年报
-                </button>
-              </div>
-
-              <div class="fa-body" id="fa-body">
-                <div class="fa-card fa-summary">
-                  <div class="fa-summary-head">
-                    <div>
-                      <h4 id="fa-summary-title">示例公司A · 2025 年报</h4>
-                      <p class="fa-sub" id="fa-summary-blurb"></p>
+              <div class="fa-main" id="fa-main">
+                <!-- ========== 比率分析 ========== -->
+                <div class="fa-page" data-view="analysis">
+                  <div class="fa-toolbar">
+                    <span class="el-select fa-w-company" aria-label="企业">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
+                    <span class="el-select fa-w-period" aria-label="报告期">2025 年报<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
+                    <span class="el-tag is-info is-plain">数据期 2025 年报 · 完整度 13/13</span>
+                    <div class="el-radio-group is-small" role="group" aria-label="视图切换">
+                      <button type="button" data-role="manager" aria-pressed="false">管理层</button>
+                      <button type="button" data-role="investor" aria-pressed="true">投资人</button>
+                      <button type="button" data-role="pro" aria-pressed="false">专业全量</button>
                     </div>
-                    <span class="fa-badge" id="fa-summary-badge">整体稳健</span>
+                    <div class="fa-toolbar-actions">
+                      <button type="button" class="el-button is-small" data-msg="示意：导出 HTML 快照需在真实系统中进行">导出 HTML 快照</button>
+                      <button type="button" class="el-button is-small is-success is-plain" data-msg="示意：导出 Excel 需在真实系统中进行">导出 Excel</button>
+                      <button type="button" class="el-button is-small is-primary is-plain" data-msg="示意：打印 / PDF 需在真实系统中进行">打印 / PDF</button>
+                    </div>
                   </div>
-                  <ul class="fa-summary-lines" id="fa-summary-lines"></ul>
-                </div>
 
-                <p class="fa-section-label">核心指标 <span>悬停查看口径 · 点击切换趋势</span></p>
-                <div class="fa-kpis" id="fa-kpis"></div>
-
-                <div class="fa-charts">
-                  <div class="fa-card fa-chart">
-                    <div class="fa-chart-head">
-                      <div>
-                        <p class="fa-module-title" id="fa-trend-title">趋势</p>
-                        <p class="fa-sub" id="fa-trend-formula"></p>
+                  <div class="fa-body" id="fa-body">
+                    <div class="el-card fa-summary">
+                      <div class="fa-summary-head">
+                        <div>
+                          <div class="fa-summary-title">示例公司A · 2025 年报</div>
+                          <div class="fa-summary-sub" id="fa-summary-sub"></div>
+                        </div>
+                        <span class="el-tag is-large is-dark is-success" id="fa-summary-badge">整体稳健</span>
                       </div>
-                      <span class="fa-sub">2022–2025 年报</span>
+                      <ul class="fa-summary-lines" id="fa-summary-lines"></ul>
                     </div>
-                    <svg class="fa-trend" id="fa-trend" viewBox="0 0 360 190" role="img" aria-label="指标趋势折线图"></svg>
-                  </div>
-                  <div class="fa-card fa-chart">
-                    <div class="fa-chart-head">
-                      <div>
-                        <p class="fa-module-title">变动结构</p>
-                        <p class="fa-sub">较上期 · 2024 年报 → 2025 年报</p>
+
+                    <div class="fa-section-label">核心指标</div>
+                    <div class="fa-kpis" id="fa-kpis"></div>
+
+                    <div class="el-card fa-compare">
+                      <div class="el-card__header fa-compare-head"><span>较上期变动</span><span class="fa-text-info">2024 年报 → 2025 年报</span></div>
+                      <div class="el-card__body">
+                        <div class="fa-compare-grid">
+                          <div class="fa-module">
+                            <div class="fa-module-title">变动结构</div>
+                            <div class="fa-module-sub">悬停扇区可看具体指标与变动</div>
+                            <div class="fa-donut-host">
+                              <svg class="fa-donut" id="fa-donut" viewBox="0 0 260 200" role="img" aria-label="变动结构环图"></svg>
+                              <div class="fa-chart-tip" id="fa-donut-tip" hidden></div>
+                            </div>
+                            <div class="fa-stat-chips" id="fa-stat-chips"></div>
+                          </div>
+                          <div class="fa-module">
+                            <div class="fa-module-title">重点变动</div>
+                            <div class="fa-module-sub">点卡高亮上方 KPI · 哑铃=上期→本期</div>
+                            <div class="fa-focus-grid" id="fa-focus"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="fa-donut-wrap">
-                      <svg class="fa-donut" id="fa-donut" viewBox="0 0 120 120" role="img" aria-label="核心指标变动结构环图"></svg>
-                      <ul class="fa-legend" id="fa-legend"></ul>
+
+                    <div class="el-card fa-trend-card">
+                      <div class="el-card__header">
+                        <div class="fa-trend-head">
+                          <span class="fa-section-label is-inline">趋势分析</span>
+                          <div class="el-radio-group is-small" role="group" aria-label="趋势分组" id="fa-trend-tabs">
+                            <button type="button" data-tab="profit">盈利</button>
+                            <button type="button" data-tab="solvency">偿债</button>
+                            <button type="button" data-tab="ops_cash">营运与现金流</button>
+                          </div>
+                        </div>
+                        <div class="fa-trend-select"><span class="fa-trend-select-label">对比指标</span><div class="fa-checks" id="fa-trend-checks"></div></div>
+                      </div>
+                      <div class="el-card__body">
+                        <svg class="fa-trend" id="fa-trend" viewBox="0 0 600 260" role="img" aria-label="趋势折线图"></svg>
+                      </div>
+                    </div>
+
+                    <div class="fa-all-toggle"><button type="button" class="el-button is-text is-primary" id="fa-all-toggle" aria-expanded="false">展开全部指标与公式</button></div>
+                    <div id="fa-all" hidden></div>
+                  </div>
+                </div>
+
+                <!-- ========== 年报导入 ========== -->
+                <div class="fa-page" data-view="import" hidden>
+                  <div class="fa-import-page">
+                    <div class="el-tabs" role="tablist" aria-label="导入方式">
+                      <button type="button" role="tab" class="el-tabs__item" data-itab="fetch" aria-selected="true">在线拉取</button>
+                      <button type="button" role="tab" class="el-tabs__item" data-itab="excel" aria-selected="false">Excel 模板导入</button>
+                      <button type="button" role="tab" class="el-tabs__item" data-itab="pdf" aria-selected="false">年报 PDF 导入</button>
+                    </div>
+
+                    <!-- 在线拉取 -->
+                    <div class="fa-ipane" data-ipane="fetch" role="tabpanel">
+                      <div class="el-alert is-info">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
+                        <span>支持证券代码或公司名称（全称会自动回退简称）。A 股走巨潮公开披露；下载后人工核对，不自动入库。请控制频率。</span>
+                      </div>
+                      <div class="el-form-item"><span class="el-form-item__label">关联企业</span><span class="el-select fa-w-assoc">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
+                      <div class="el-card fa-fetch-card">
+                        <div class="el-card__header"><strong>巨潮 · 代码 / 公司名称 + 年份</strong></div>
+                        <div class="el-card__body">
+                          <div class="fa-fetch-row">
+                            <input class="el-input" id="fa-fetch-q" type="text" value="示例公司A" aria-label="证券代码或公司名称">
+                            <div class="el-input-number" aria-label="年份">
+                              <button type="button" data-year="-1" aria-label="减少年份">−</button>
+                              <span id="fa-fetch-year">2025</span>
+                              <button type="button" data-year="1" aria-label="增加年份">+</button>
+                            </div>
+                            <button type="button" class="el-button is-primary" id="fa-fetch-search">检索年报</button>
+                          </div>
+                          <p class="fa-sub-tip">先匹配证券（名称支持全称），再列出该年「年度报告」全文（自动排除摘要/英文）。</p>
+                          <div class="fa-candidates" id="fa-candidates" hidden>
+                            <div class="fa-fetch-row">
+                              <button type="button" class="el-button is-success is-small" id="fa-fetch-import">导入勾选（1）</button>
+                            </div>
+                            <div class="el-table-wrap">
+                              <table class="el-table">
+                                <thead><tr><th class="is-check"><span class="el-checkbox is-checked" aria-hidden="true"></span></th><th>年份</th><th>代码</th><th>简称</th><th>标题</th><th>公告日</th></tr></thead>
+                                <tbody id="fa-candidate-body"></tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="el-card fa-fetch-card">
+                        <div class="el-card__header"><strong>PDF 直链</strong></div>
+                        <div class="el-card__body">
+                          <input class="el-input" type="text" placeholder="https://.../*.pdf" aria-label="PDF 直链">
+                          <button type="button" class="el-button is-primary is-plain fa-mt" data-msg="示意：请使用上方「检索年报」或「年报 PDF 导入」">下载并解析</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Excel 模板导入 -->
+                    <div class="fa-ipane" data-ipane="excel" role="tabpanel" hidden>
+                      <div class="el-alert is-info">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
+                        <span>下载模板 → 填写三表金额 → 上传预览 → 确认入库。财务比率 sheet 会被忽略（入库后动态计算）。</span>
+                      </div>
+                      <div class="el-form-item"><span class="el-form-item__label">目标企业</span><span class="el-select fa-w-assoc">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
+                      <div class="el-form-item"><span class="el-form-item__label">模板期间</span>
+                        <div class="el-radio-group" role="group" aria-label="模板期间"><button type="button" aria-pressed="true" class="is-static">年报</button><button type="button" aria-pressed="false" class="is-static">季报</button></div>
+                      </div>
+                      <button type="button" class="el-upload-dragger" id="fa-excel-upload">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" class="fa-upload-icon"><path d="M12 15V5M7.5 9.5 12 5l4.5 4.5"/><path d="M5 15v4h14v-4"/></svg>
+                        <span class="fa-upload-tip">拖拽或点击上传已填好的 .xlsx</span>
+                        <span class="fa-upload-sub">也可上传本系统「导出 Excel」生成的文件（比率 sheet 自动忽略）</span>
+                      </button>
+                      <div id="fa-excel-preview" hidden>
+                        <h4 class="fa-h4">预览</h4>
+                        <div class="el-table-wrap">
+                          <table class="el-table">
+                            <thead><tr><th>报表</th><th>科目行</th><th>非空单元格</th><th>期间</th></tr></thead>
+                            <tbody>
+                              <tr><td>资产负债表</td><td>48</td><td>47</td><td>2025 年报</td></tr>
+                              <tr><td>利润表</td><td>28</td><td>27</td><td>2025 年报</td></tr>
+                              <tr><td>现金流量表</td><td>24</td><td>24</td><td>2025 年报</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="fa-actions"><button type="button" class="el-button is-primary" data-msg="示意：入库需在真实系统中完成，此处不写入数据">确认入库</button></div>
+                      </div>
+                    </div>
+
+                    <!-- 年报 PDF 导入 -->
+                    <div class="fa-ipane" data-ipane="pdf" role="tabpanel" hidden>
+                      <ol class="el-steps" id="fa-steps" aria-label="导入步骤">
+                        <li class="el-step"><span class="el-step__icon">1</span><span class="el-step__title">上传 / 在线拉取</span></li>
+                        <li class="el-step"><span class="el-step__icon">2</span><span class="el-step__title">识别与核对</span></li>
+                        <li class="el-step"><span class="el-step__icon">3</span><span class="el-step__title">入库完成</span></li>
+                      </ol>
+
+                      <div id="fa-pdf-upload">
+                        <button type="button" class="el-upload-dragger" id="fa-pdf-dragger">
+                          <svg viewBox="0 0 24 24" aria-hidden="true" class="fa-upload-icon"><path d="M6.5 3h8l4 4v14h-12z"/><path d="M14.5 3v4h4"/></svg>
+                          <span class="fa-upload-tip">拖拽或点击上传 A 股年报 PDF</span>
+                          <span class="fa-upload-sub">也可在「在线拉取」勾选下载后自动进入本页核对</span>
+                        </button>
+                      </div>
+
+                      <div id="fa-pdf-review" hidden>
+                        <div class="el-alert" id="fa-review-alert">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
+                          <span id="fa-review-status"></span>
+                        </div>
+                        <div class="fa-meta-form">
+                          <div class="el-form-item"><span class="el-form-item__label">公司名</span><span class="el-input is-readonly fa-w-assoc">示例公司A</span></div>
+                          <div class="el-form-item"><span class="el-form-item__label">年份</span><span class="el-input is-readonly fa-w-year">2025</span></div>
+                          <div class="el-form-item"><span class="el-form-item__label">期间</span><span class="el-select fa-w-kind">年报<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
+                        </div>
+
+                        <div class="fa-quality">
+                          <div class="fa-quality-head">
+                            <h4>映射质量</h4>
+                            <span class="el-tag is-dark is-success">核心科目覆盖 96%</span>
+                            <span class="el-tag is-info is-plain">置信度 88%</span>
+                            <span class="el-tag is-warning is-plain">未映射 3</span>
+                          </div>
+                          <div class="el-table-wrap">
+                            <table class="el-table">
+                              <thead><tr><th>报表</th><th class="is-center">核心科目</th><th class="is-center">已映射字段</th><th class="fa-col-cov">覆盖率</th></tr></thead>
+                              <tbody>
+                                <tr><td>资产负债表</td><td class="is-center">24 / 25</td><td class="is-center">44</td><td><span class="el-progress is-success"><span style="width:96%">96%</span></span></td></tr>
+                                <tr><td>利润表</td><td class="is-center">15 / 16</td><td class="is-center">26</td><td><span class="el-progress is-success"><span style="width:94%">94%</span></span></td></tr>
+                                <tr><td>现金流量表</td><td class="is-center">10 / 10</td><td class="is-center">22</td><td><span class="el-progress is-success"><span style="width:100%">100%</span></span></td></tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="fa-unmapped-head">
+                            <h4>未映射科目（3）</h4>
+                            <div class="el-radio-group is-small" role="group" aria-label="按报表筛选" id="fa-unmapped-filter">
+                              <button type="button" data-kind="all" aria-pressed="true">全部 3</button>
+                              <button type="button" data-kind="资产负债表" aria-pressed="false">资产负债表 1</button>
+                              <button type="button" data-kind="利润表" aria-pressed="false">利润表 1</button>
+                              <button type="button" data-kind="现金流量表" aria-pressed="false">现金流量表 1</button>
+                            </div>
+                          </div>
+                          <p class="fa-sub-tip">未映射行不会写入标准科目；可核对金额是否已由其他科目覆盖，或入库后在报表页手工补录。</p>
+                          <div class="el-table-wrap">
+                            <table class="el-table">
+                              <thead><tr><th>报表</th><th>原文科目</th><th class="is-right">金额</th><th class="is-center">页</th><th>原因</th></tr></thead>
+                              <tbody id="fa-unmapped-body"></tbody>
+                            </table>
+                          </div>
+                        </div>
+
+                        <div class="fa-actions">
+                          <button type="button" class="el-button" id="fa-save">保存修改</button>
+                          <button type="button" class="el-button is-primary" id="fa-commit">确认本份入库</button>
+                          <button type="button" class="el-button is-success is-plain" id="fa-goto-statements" hidden data-msg="示意原型只还原「比率分析」与「年报导入」两页">查看三大报表</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="fa-card fa-all" id="fa-all" hidden>
-                  <div class="fa-chart-head">
-                    <div>
-                      <p class="fa-module-title">全部指标与公式</p>
-                      <p class="fa-sub">4 类 13 项 · 本期值与较上期变动</p>
-                    </div>
+                <!-- 其他菜单 -->
+                <div class="fa-page" data-view="other" hidden>
+                  <div class="el-empty">
+                    <svg viewBox="0 0 64 48" aria-hidden="true"><rect x="8" y="14" width="48" height="28" rx="3"/><path d="M8 24h14l4 6h12l4-6h14"/></svg>
+                    <p id="fa-other-text">示意原型只还原「比率分析」与「年报导入」两页</p>
                   </div>
-                  <div id="fa-all-groups"></div>
                 </div>
               </div>
 
-              <div class="fa-toast" id="fa-toast" role="status" aria-live="polite"></div>
-            </div>
-
-            <div class="fa-overlay" id="fa-overlay" hidden>
-              <div class="fa-dialog" role="dialog" aria-modal="true" aria-labelledby="fa-dialog-title" tabindex="-1">
-                <div class="fa-dialog-head">
-                  <h4 id="fa-dialog-title">导入年报</h4>
-                  <button type="button" class="fa-icon-btn" data-close aria-label="关闭对话框">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-                  </button>
-                </div>
-
-                <ol class="fa-steps" aria-label="导入步骤">
-                  <li data-step="1" class="is-current">上传 / 在线拉取</li>
-                  <li data-step="2">识别与核对</li>
-                  <li data-step="3">入库完成</li>
-                </ol>
-
-                <!-- 第 1 步：选择来源 -->
-                <div class="fa-pane" data-pane="choose">
-                  <fieldset class="fa-sources">
-                    <legend>选择来源</legend>
-                    <label class="fa-source">
-                      <input type="radio" name="fa-source" value="pdf" checked>
-                      <span class="fa-source-body">
-                        <strong>年报 PDF 导入</strong>
-                        <span>上传 A 股年报 PDF，按页码定位三大报表</span>
-                      </span>
-                    </label>
-                    <label class="fa-source">
-                      <input type="radio" name="fa-source" value="excel">
-                      <span class="fa-source-body">
-                        <strong>Excel 模板导入</strong>
-                        <span>按模板填写三大报表后导入</span>
-                      </span>
-                    </label>
-                    <label class="fa-source">
-                      <input type="radio" name="fa-source" value="cninfo">
-                      <span class="fa-source-body">
-                        <strong>在线拉取 · 巨潮资讯</strong>
-                        <span>按证券代码或公司名称检索年报全文</span>
-                      </span>
-                    </label>
-                  </fieldset>
-                  <p class="fa-source-detail" id="fa-source-detail"></p>
-                  <div class="fa-dialog-foot">
-                    <button type="button" class="fa-btn" data-close>取消</button>
-                    <button type="button" class="fa-btn fa-btn-primary" id="fa-start">开始识别</button>
-                  </div>
-                </div>
-
-                <!-- 第 2 步：识别进度 -->
-                <div class="fa-pane" data-pane="progress" hidden>
-                  <p class="fa-progress-label"><span id="fa-progress-stage">准备中…</span><span id="fa-progress-pct">0%</span></p>
-                  <div class="fa-progress" role="progressbar" aria-label="识别进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="fa-progressbar">
-                    <span id="fa-progress-fill"></span>
-                  </div>
-                  <ul class="fa-stage-list" id="fa-stage-list"></ul>
-                  <div class="fa-dialog-foot">
-                    <button type="button" class="fa-btn" data-close>取消</button>
-                  </div>
-                </div>
-
-                <!-- 第 3 步：映射结果 -->
-                <div class="fa-pane" data-pane="result" hidden>
-                  <div class="fa-result-head">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 10"/></svg>
-                    <div>
-                      <p class="fa-result-title" id="fa-result-title"></p>
-                      <p class="fa-sub">复核确认后才会入库；缺失值与未映射行保留原因。</p>
-                    </div>
-                  </div>
-                  <div class="fa-quality" id="fa-quality"></div>
-                  <p class="fa-module-title fa-review-title">需人工复核</p>
-                  <ul class="fa-review" id="fa-review"></ul>
-                  <div class="fa-dialog-foot">
-                    <button type="button" class="fa-btn" data-close>稍后处理</button>
-                    <button type="button" class="fa-btn fa-btn-primary" id="fa-go-review">进入复核</button>
-                  </div>
-                </div>
-              </div>
+              <div class="fa-loading" id="fa-loading" hidden><span class="fa-spinner" aria-hidden="true"></span><span id="fa-loading-text">加载中</span></div>
+              <div class="el-message" id="fa-message" role="status" aria-live="polite"></div>
             </div>
           </div>
         </div>
       </div>
-      <p class="stage-note">示意原型：只还原界面与交互，不连接真实功能，数据为示例。<br>“示例公司A”及其中全部金额、比率均为虚构示例，非任何真实公司财报；界面标签与比率口径取自项目源码。</p>
+      <p class="stage-note">示意原型：只还原界面与交互，不连接真实功能，数据为示例。<br>“示例公司A”及其中全部金额、比率、映射统计均为虚构示例，非任何真实公司财报；界面布局、文案与比率口径取自项目截图与源码。</p>
     </section>
 
     <section class="section">

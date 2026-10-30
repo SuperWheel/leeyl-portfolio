@@ -1,6 +1,7 @@
 // 财务分析系统 · 交互原型（示意）
-// 只还原「比率分析」页的界面与交互，不连接真实功能。
-// “示例公司A”的全部报表数字均为虚构示例；比率口径、视图配置与信号阈值取自项目源码。
+// 按项目 README 中的真实界面截图与前端源码（Vue3 + Element Plus + ECharts）还原「比率分析」与「年报导入」两页。
+// 不连接真实功能；“示例公司A”的全部报表数字、映射统计均为虚构示例。
+// 比率口径、视图配置、信号阈值、变动语义和界面文案取自项目源码。
 (function () {
   'use strict';
 
@@ -59,14 +60,14 @@
     BY_KEY[r.key] = r;
   });
 
-  /* ---------------- 三类视图（来自源码 ROLE_PROFILES） ---------------- */
+  /* ---------------- 三类视图（来自源码 ROLE_PROFILES；tab = defaultTrendTab，all = expandAll） ---------------- */
   var ROLES = {
     manager: { label: '管理层', blurb: '关注偿债、流动性与经营现金流，快速识别经营风险',
-      kpis: ['current_ratio', 'quick_ratio', 'cash_ratio', 'debt_to_asset', 'ocfr', 'operating_margin'], all: false },
+      kpis: ['current_ratio', 'quick_ratio', 'cash_ratio', 'debt_to_asset', 'ocfr', 'operating_margin'], tab: 'ops_cash', all: false },
     investor: { label: '投资人', blurb: '关注回报、利润率与杠杆，把握盈利质量与股东收益',
-      kpis: ['roe', 'roa', 'gross_margin', 'net_margin', 'debt_to_asset', 'asset_turnover'], all: false },
+      kpis: ['roe', 'roa', 'gross_margin', 'net_margin', 'debt_to_asset', 'asset_turnover'], tab: 'profit', all: false },
     pro: { label: '专业全量', blurb: '完整 13 项指标、公式与口径，适合复核与深入分析',
-      kpis: ['roe', 'net_margin', 'gross_margin', 'debt_to_asset', 'current_ratio', 'ocfr'], all: true }
+      kpis: ['roe', 'net_margin', 'gross_margin', 'debt_to_asset', 'current_ratio', 'ocfr'], tab: 'profit', all: true }
   };
 
   /* ---------------- 规则：信号、变动、格式化 ---------------- */
@@ -115,7 +116,17 @@
     return { meaning: meaning, label: label, delta: delta, rel: rel, dir: dir };
   }
 
-  function arrow(c) { return c.dir === 'up' ? '↑' : (c.dir === 'down' ? '↓' : '→'); }
+  function arrow(dir) { return dir === 'up' ? '↑' : (dir === 'down' ? '↓' : '→'); }
+  function yoyClass(r, c) {
+    if (c.dir === 'flat' || c.meaning === 'na') return 'yoy-flat';
+    if (c.meaning === 'improve') return 'yoy-up';
+    if (c.meaning === 'worse') return 'yoy-down';
+    return 'yoy-flat';
+  }
+  function meaningClass(c) {
+    return c.meaning === 'improve' ? 'meaning-improve' : (c.meaning === 'worse' ? 'meaning-watch' : 'meaning-flat');
+  }
+  var TAG = { good: 'is-success', watch: 'is-warning', risk: 'is-danger', na: 'is-info', neutral: 'is-info' };
 
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (ch) {
@@ -123,414 +134,469 @@
     });
   }
 
-  /* ---------------- 页面元素 ---------------- */
+  /* 趋势分组（源码 TREND_TABS / DEFAULT_TREND_SELECTION） */
+  var TREND_TABS = {
+    profit: { keys: ['gross_margin', 'operating_margin', 'net_margin', 'roe', 'roa'], def: ['gross_margin', 'net_margin'] },
+    solvency: { keys: ['current_ratio', 'quick_ratio', 'cash_ratio', 'debt_to_asset', 'debt_to_equity'], def: ['current_ratio', 'debt_to_asset'] },
+    ops_cash: { keys: ['asset_turnover', 'ocfr'], def: ['asset_turnover', 'ocfr'] }
+  };
+  var PALETTE = ['--fa-s1', '--fa-s2', '--fa-s3', '--fa-s4', '--fa-s5']; // ECharts 默认色板
+
   var $ = function (id) { return document.getElementById(id); };
-  var body = $('fa-body');
-  var kpiBox = $('fa-kpis');
-  var trendSvg = $('fa-trend');
-  var donutSvg = $('fa-donut');
-  var legend = $('fa-legend');
-  var allBox = $('fa-all');
-  var allGroups = $('fa-all-groups');
-  var toastEl = $('fa-toast');
-  var roleButtons = app.querySelectorAll('[data-role]');
+  var state = { page: 'analysis', role: 'investor', highlight: null, tab: 'profit', keys: TREND_TABS.profit.def.slice(), showAll: false };
 
-  var state = { role: 'investor', trendKey: 'roe' };
+  /* ---------------- 通用：ElMessage 与 v-loading ---------------- */
+  var msgEl = $('fa-message');
+  var msgTimer = null;
+  function message(text, type) {
+    msgEl.textContent = text;
+    msgEl.className = 'el-message is-show' + (type && type !== 'success' ? ' is-' + type : '');
+    clearTimeout(msgTimer);
+    msgTimer = setTimeout(function () { msgEl.classList.remove('is-show'); }, 2600);
+  }
+  var loadingEl = $('fa-loading');
+  var loadTimer = null;
+  function withLoading(text, ms, done) {
+    $('fa-loading-text').textContent = text;
+    loadingEl.hidden = false;
+    clearTimeout(loadTimer);
+    loadTimer = setTimeout(function () { loadingEl.hidden = true; done(); }, reduced() ? 150 : ms);
+  }
+  app.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-msg]');
+    if (b) message(b.dataset.msg, 'info');
+  });
 
-  /* ---------------- 渲染：健康摘要 ---------------- */
+  /* ---------------- 菜单与页面 ---------------- */
+  var TITLES = { dashboard: '仪表盘', statements: '三大报表', import: '年报导入', analysis: '比率分析', compare: '多期对比' };
+  var menuItems = app.querySelectorAll('.fa-menu-item');
+  var pages = app.querySelectorAll('[data-view]');
+  function go(page) {
+    state.page = page;
+    menuItems.forEach(function (m) {
+      var on = m.dataset.page === page;
+      m.classList.toggle('is-active', on);
+      if (on) m.setAttribute('aria-current', 'page'); else m.removeAttribute('aria-current');
+    });
+    var view = (page === 'analysis' || page === 'import') ? page : 'other';
+    pages.forEach(function (p) { p.hidden = p.dataset.view !== view; });
+    $('fa-header-title').textContent = TITLES[page];
+    if (view === 'other') $('fa-other-text').textContent = '示意原型只还原「比率分析」与「年报导入」两页，「' + TITLES[page] + '」未展开';
+    if (view === 'analysis') renderTrend();
+  }
+  menuItems.forEach(function (m) { m.addEventListener('click', function () { go(m.dataset.page); }); });
+
+  /* ================= 比率分析 ================= */
   function renderSummary() {
     var role = ROLES[state.role];
-    $('fa-summary-blurb').textContent = role.blurb + ' · 规则阈值仅供参考，非投资建议';
-
+    $('fa-summary-sub').textContent = role.blurb + ' · 规则阈值仅供参考，非投资建议';
     var v = function (k) { return fmt(BY_KEY[k], BY_KEY[k].values[CUR]); };
     var lv = function (k) { return signal(BY_KEY[k], BY_KEY[k].values[CUR]).level; };
     var lines = [];
-    var profitTone = (lv('roe') === 'good' || lv('net_margin') === 'good') ? '盈利能力整体较好' : '盈利能力中性';
-    lines.push(profitTone + '：毛利率 ' + v('gross_margin') + '，净利率 ' + v('net_margin') + '，ROE ' + v('roe') + '。');
-    var debtTone = (lv('debt_to_asset') === 'risk' || lv('current_ratio') === 'risk') ? '偿债与杠杆需关注' : '偿债结构相对稳健';
-    lines.push(debtTone + '：资产负债率 ' + v('debt_to_asset') + '，流动比率 ' + v('current_ratio') + '。');
+    lines.push(((lv('roe') === 'good' || lv('net_margin') === 'good') ? '盈利能力整体较好' : '盈利能力中性') +
+      '：毛利率 ' + v('gross_margin') + '，净利率 ' + v('net_margin') + '，ROE ' + v('roe') + '。');
+    lines.push(((lv('debt_to_asset') === 'risk' || lv('current_ratio') === 'risk') ? '偿债与杠杆需关注' : '偿债结构相对稳健') +
+      '：资产负债率 ' + v('debt_to_asset') + '，流动比率 ' + v('current_ratio') + '。');
     var oc = change(BY_KEY.ocfr);
-    lines.push('经营现金流/营收 ' + v('ocfr') + (oc.meaning === 'improve' ? '；较上期改善。' : (oc.meaning === 'worse' ? '；较上期走弱。' : '。')));
+    lines.push('经营现金流/营收 ' + v('ocfr') + (oc.meaning === 'improve' ? '；较上期改善。' : (oc.meaning === 'worse' ? '；较上期走弱。' : '，现金流与收入匹配尚可。')));
     lines.push('数据完整度：13/13 项可计算。');
-
-    var goods = 0, risks = 0, watches = [];
-    role.kpis.forEach(function (k) {
-      var s = signal(BY_KEY[k], BY_KEY[k].values[CUR]);
-      if (s.level === 'good') goods++;
-      else if (s.level === 'risk') risks++;
-      else if (s.level === 'watch') watches.push(BY_KEY[k].name);
-    });
-    if (watches.length) lines.push('关注项：' + watches.join('、') + '。');
     $('fa-summary-lines').innerHTML = lines.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('');
-
-    var badge = $('fa-summary-badge');
-    var overall = risks >= 2 ? 'risk' : (risks === 1 ? 'watch' : (goods >= 2 ? 'good' : 'watch'));
-    badge.textContent = { good: '整体稳健', watch: '需要关注', risk: '风险偏高' }[overall];
-    badge.className = 'fa-badge' + (overall === 'good' ? '' : ' is-' + overall);
   }
 
-  /* ---------------- 渲染：指标卡 ---------------- */
   function renderKpis() {
     var role = ROLES[state.role];
-    kpiBox.innerHTML = role.kpis.map(function (k, i) {
-      var r = BY_KEY[k];
-      var cur = r.values[CUR], prev = r.values[PREV];
-      var s = signal(r, cur);
-      var c = change(r);
-      var cls = c.meaning === 'improve' ? 'is-improve' : (c.meaning === 'worse' ? 'is-worse' : 'is-flat');
-      var tipId = 'fa-tip-' + k;
-      return '<button type="button" class="fa-kpi is-' + s.level + '" data-kpi="' + k + '" style="--i:' + i + '"' +
-        ' aria-pressed="' + (k === state.trendKey) + '" aria-describedby="' + tipId + '">' +
-        '<span class="fa-kpi-head"><span class="fa-kpi-name">' + esc(r.name) + '</span>' +
-        '<span class="fa-tag' + (s.level === 'good' ? '' : ' is-' + s.level) + '">' + s.label + '</span></span>' +
+    $('fa-kpis').innerHTML = role.kpis.map(function (k, i) {
+      var r = BY_KEY[k], cur = r.values[CUR], prev = r.values[PREV];
+      var s = signal(r, cur), c = change(r);
+      var variant = k === 'roe' ? '<span class="fa-kpi-variant">口径 net_profit_parent / total_equity_parent</span>' : '';
+      return '<button type="button" class="fa-kpi sig-' + s.level + '" data-kpi="' + k + '" style="--i:' + i + '"' +
+        ' aria-pressed="' + (state.highlight === k) + '" aria-describedby="fa-tip-' + k + '">' +
+        '<span class="fa-kpi-top"><span class="fa-kpi-name">' + esc(r.name) + '</span>' +
+        '<span class="el-tag is-small ' + TAG[s.level] + '">' + s.label + '</span></span>' +
         '<span class="fa-kpi-value">' + fmt(r, cur) + '</span>' +
-        '<span class="fa-kpi-trans">' + fmt(r, prev) + ' → ' + fmt(r, cur) + '</span>' +
-        '<span class="fa-kpi-delta ' + cls + '">' + arrow(c) + ' ' + c.label + ' ' + c.delta + ' <em>' + c.rel + '</em></span>' +
-        '<span class="fa-tip" role="tooltip" id="' + tipId + '"><b>口径 · ' + esc(r.group) + '</b>' + esc(r.desc) + '</span>' +
+        '<span class="fa-kpi-transition">' + fmt(r, prev) + ' → ' + fmt(r, cur) + '</span>' +
+        '<span class="fa-kpi-yoy ' + yoyClass(r, c) + '"><span>' + arrow(c.dir) + '</span>' +
+        '<span class="' + meaningClass(c) + '">' + c.label + '</span><span>' + c.delta + '</span>' +
+        (c.rel ? '<span class="fa-kpi-rel">' + c.rel + '</span>' : '') + '</span>' + variant +
+        '<span class="fa-tip" role="tooltip" id="fa-tip-' + k + '">' + esc(r.group) + ' · ' + esc(r.desc) + '</span>' +
         '</button>';
     }).join('');
   }
 
-  /* ---------------- 渲染：趋势折线（内联 SVG） ---------------- */
-  var SVGNS = 'http://www.w3.org/2000/svg';
-  function renderTrend(animate) {
-    var r = BY_KEY[state.trendKey];
-    $('fa-trend-title').textContent = r.name + ' · 近 4 期趋势';
-    $('fa-trend-formula').textContent = '口径：' + r.desc;
-
-    // 视图宽度随容器变化，保证窄屏下刻度文字不被缩小
-    var W = Math.max(260, Math.min(520, Math.round(trendSvg.clientWidth) || 360));
-    var H = 190, L = 44, R = 16, T = 22, B = 30;
-    trendSvg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    var vals = YEARS.map(function (y) { return r.values[y]; });
-    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
-    var pad = (max - min) * 0.35 || Math.abs(max) * 0.1 || 0.1;
-    var lo = min - pad, hi = max + pad;
-    var IN = 18; // 首末点内缩，避免与纵轴刻度重叠
-    var x = function (i) { return L + IN + i * (W - L - R - IN * 2) / (YEARS.length - 1); };
-    var y = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
-    var tick = function (v) { return r.unit === 'percent' ? (v * 100).toFixed(1) + '%' : v.toFixed(2); };
-
-    var h = '';
-    for (var g = 0; g < 4; g++) {
-      var gv = lo + (hi - lo) * g / 3;
-      var gy = y(gv).toFixed(1);
-      h += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + gy + '" y2="' + gy + '"/>';
-      h += '<text class="axis-text" x="' + (L - 6) + '" y="' + gy + '" dy="3.5" text-anchor="end">' + tick(gv) + '</text>';
-    }
-    var pts = vals.map(function (v, i) { return x(i).toFixed(1) + ',' + y(v).toFixed(1); });
-    var area = 'M' + x(0).toFixed(1) + ',' + (H - B) + ' L' + pts.join(' L') + ' L' + x(YEARS.length - 1).toFixed(1) + ',' + (H - B) + ' Z';
-    h += '<path class="area" d="' + area + '"/>';
-    h += '<path class="line" d="M' + pts.join(' L') + '"/>';
-    YEARS.forEach(function (yr, i) {
-      var isCur = yr === CUR;
-      var px = x(i).toFixed(1), py = y(vals[i]).toFixed(1);
-      h += '<circle class="pt' + (isCur ? ' is-cur' : '') + '" cx="' + px + '" cy="' + py + '" r="' + (isCur ? 4.5 : 3.5) + '"/>';
-      h += '<text class="pt-label' + (isCur ? ' is-cur' : '') + '" x="' + px + '" y="' + (py - 9) + '" text-anchor="middle">' + fmt(r, vals[i]) + '</text>';
-      h += '<text class="axis-text" x="' + px + '" y="' + (H - 10) + '" text-anchor="middle">' + yr + ' 年报' + '</text>';
-      if (yr === PREV) h += '<text class="prev-mark" x="' + px + '" y="' + (H - 0.5) + '" text-anchor="middle">去年同期</text>';
+  // 按幅度排序的改善 / 需关注 Top 3（源码 rankMovers）
+  function movers() {
+    var rows = ROLES[state.role].kpis.map(function (k) {
+      var r = BY_KEY[k], c = change(r);
+      var d = r.values[CUR] - r.values[PREV];
+      return { r: r, c: c, mag: Math.abs(r.unit === 'percent' ? d * 100 : d) };
     });
-    trendSvg.innerHTML = h;
-    trendSvg.setAttribute('aria-label', r.name + '近 4 期趋势：' + YEARS.map(function (yr, i) { return yr + ' 年报 ' + fmt(r, vals[i]); }).join('，'));
+    function top(meaning) {
+      var list = rows.filter(function (x) { return x.c.meaning === meaning; }).sort(function (a, b) { return b.mag - a.mag; }).slice(0, 3);
+      var max = list.length ? list[0].mag : 1;
+      list.forEach(function (x) { x.bar = Math.max(8, Math.round(x.mag / (max || 1) * 100)); });
+      return list;
+    }
+    return { improve: top('improve'), watch: top('worse'), rows: rows };
+  }
 
-    if (animate && !reduced()) {
-      var line = trendSvg.querySelector('.line');
-      if (line && line.getTotalLength) {
-        var len = line.getTotalLength();
-        line.style.strokeDasharray = len;
-        line.style.strokeDashoffset = len;
-        line.getBoundingClientRect();
-        line.style.transition = 'stroke-dashoffset .6s ease';
-        line.style.strokeDashoffset = '0';
+  var donutData = [];
+  function renderCompare() {
+    var m = movers();
+    var groups = { improve: [], watch: [], flat: [] };
+    m.rows.forEach(function (x) {
+      if (x.c.meaning === 'improve') groups.improve.push(x);
+      else if (x.c.meaning === 'worse') groups.watch.push(x);
+      else groups.flat.push(x);
+    });
+    donutData = [
+      { key: 'improve', name: '改善', color: '--fa-success', items: groups.improve },
+      { key: 'watch', name: '需关注', color: '--fa-danger', items: groups.watch },
+      { key: 'flat', name: '持平', color: '--fa-text-5', items: groups.flat }
+    ].filter(function (d) { return d.items.length; });
+    drawDonut(m.rows.length);
+
+    $('fa-stat-chips').innerHTML = [['improve', '改善'], ['watch', '需关注'], ['flat', '持平']].map(function (p) {
+      return '<div class="fa-stat-chip ' + p[0] + '"><span class="fa-stat-num">' + groups[p[0]].length + '</span><span class="fa-stat-label">' + p[1] + '</span></div>';
+    }).join('');
+
+    function card(x, kind) {
+      return '<button type="button" class="fa-focus-card ' + kind + (state.highlight === x.r.key ? ' active' : '') + '" data-focus="' + x.r.key + '">' +
+        '<span class="fa-focus-top"><span class="fa-focus-name">' + esc(x.r.name) + '</span><span class="fa-focus-badge ' + kind + '">' + x.c.delta + '</span></span>' +
+        '<span class="fa-dumbbell"><span class="fa-db-val prev">' + fmt(x.r, x.r.values[PREV]) + '</span>' +
+        '<span class="fa-db-track"><span class="fa-db-line ' + kind + '"></span><span class="fa-db-dot prev"></span><span class="fa-db-dot curr ' + kind + '"></span></span>' +
+        '<span class="fa-db-val curr">' + fmt(x.r, x.r.values[CUR]) + '</span></span>' +
+        '<span class="fa-focus-bar"><span class="' + kind + '" style="width:' + x.bar + '%"></span></span>' +
+        '<span class="el-tag is-small is-plain ' + TAG[signal(x.r, x.r.values[CUR]).level] + '">' + signal(x.r, x.r.values[CUR]).label + '</span>' +
+        '</button>';
+    }
+    $('fa-focus').innerHTML =
+      '<div class="fa-focus-col"><div class="fa-focus-col-title improve">改善 Top</div>' +
+      (m.improve.length ? m.improve.map(function (x) { return card(x, 'improve'); }).join('') : '<div class="fa-focus-empty">暂无改善项</div>') + '</div>' +
+      '<div class="fa-focus-col"><div class="fa-focus-col-title watch">需关注 Top</div>' +
+      (m.watch.length ? m.watch.map(function (x) { return card(x, 'watch'); }).join('') : '<div class="fa-focus-empty">暂无需关注项</div>') + '</div>';
+  }
+
+  // ECharts 环图：radius ['42%','72%']、扇区白色描边、外侧标签“名称\n数量”
+  function drawDonut(total) {
+    var svg = $('fa-donut');
+    var W = 260, H = 200, cx = W / 2, cy = H * 0.48, R = Math.min(W, H) / 2;
+    var ro = R * 0.72, ri = R * 0.42;
+    var h = '', a0 = -Math.PI / 2;
+    function pt(r, a) { return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+    donutData.forEach(function (d, i) {
+      var a1 = a0 + Math.PI * 2 * d.items.length / total;
+      var large = (a1 - a0) > Math.PI ? 1 : 0;
+      var path;
+      if (d.items.length === total) {
+        path = 'M' + (cx - ro) + ',' + cy + 'a' + ro + ',' + ro + ' 0 1,0 ' + (2 * ro) + ',0a' + ro + ',' + ro + ' 0 1,0 ' + (-2 * ro) + ',0' +
+          'M' + (cx - ri) + ',' + cy + 'a' + ri + ',' + ri + ' 0 1,1 ' + (2 * ri) + ',0a' + ri + ',' + ri + ' 0 1,1 ' + (-2 * ri) + ',0Z';
+      } else {
+        var p1 = pt(ro, a0), p2 = pt(ro, a1), p3 = pt(ri, a1), p4 = pt(ri, a0);
+        path = 'M' + p1.join(',') + 'A' + ro + ',' + ro + ' 0 ' + large + ',1 ' + p2.join(',') +
+          'L' + p3.join(',') + 'A' + ri + ',' + ri + ' 0 ' + large + ',0 ' + p4.join(',') + 'Z';
       }
+      h += '<path class="seg" tabindex="0" data-i="' + i + '" fill="var(' + d.color + ')" fill-rule="evenodd" d="' + path + '"><title>' + d.name + '</title></path>';
+      var am = (a0 + a1) / 2;
+      var e1 = pt(ro + 4, am), e2 = pt(ro + 14, am);
+      var right = Math.cos(am) >= 0;
+      var e3 = [e2[0] + (right ? 8 : -8), e2[1]];
+      h += '<polyline class="lbl-line" stroke="var(' + d.color + ')" points="' + e1.join(',') + ' ' + e2.join(',') + ' ' + e3.join(',') + '"/>';
+      h += '<text class="lbl" x="' + (e3[0] + (right ? 3 : -3)) + '" y="' + (e3[1] - 3) + '" text-anchor="' + (right ? 'start' : 'end') + '">' + d.name +
+        '<tspan x="' + (e3[0] + (right ? 3 : -3)) + '" dy="15">' + d.items.length + '</tspan></text>';
+      a0 = a1;
+    });
+    h += '<text class="c-num" x="' + cx + '" y="' + (cy + 4) + '" text-anchor="middle">' + total + '</text>';
+    h += '<text class="c-lbl" x="' + cx + '" y="' + (cy + 22) + '" text-anchor="middle">核心指标</text>';
+    svg.innerHTML = h;
+    svg.setAttribute('aria-label', '变动结构：' + donutData.map(function (d) { return d.name + ' ' + d.items.length + ' 项'; }).join('，'));
+  }
+  var donutTip = $('fa-donut-tip');
+  function showDonutTip(el) {
+    var d = donutData[Number(el.getAttribute('data-i'))];
+    if (!d) return;
+    var total = donutData.reduce(function (s, x) { return s + x.items.length; }, 0);
+    donutTip.innerHTML = '<b>' + d.name + '：' + d.items.length + ' 项（' + Math.round(d.items.length / total * 100) + '%）</b>' +
+      d.items.map(function (x) {
+        return '<div>· ' + esc(x.r.name) + ' <span style="color:var(--fa-text-3)">' + x.c.delta + '</span><br><small>' +
+          fmt(x.r, x.r.values[PREV]) + ' → ' + fmt(x.r, x.r.values[CUR]) + ' · ' + signal(x.r, x.r.values[CUR]).label + '</small></div>';
+      }).join('');
+    donutTip.hidden = false;
+  }
+  var donutSvg = $('fa-donut');
+  donutSvg.addEventListener('mouseover', function (e) { if (e.target.classList.contains('seg')) showDonutTip(e.target); });
+  donutSvg.addEventListener('focusin', function (e) { if (e.target.classList.contains('seg')) showDonutTip(e.target); });
+  donutSvg.addEventListener('mouseleave', function () { donutTip.hidden = true; });
+  donutSvg.addEventListener('focusout', function () { donutTip.hidden = true; });
+
+  /* 趋势分析：ECharts 折线（smooth、空心圆点、图例在底部；单位混合时启用右轴） */
+  function renderTrendControls() {
+    app.querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.tab === state.tab)); });
+    $('fa-trend-checks').innerHTML = TREND_TABS[state.tab].keys.map(function (k) {
+      var r = BY_KEY[k];
+      return '<label class="fa-check"><input type="checkbox" value="' + k + '"' + (state.keys.indexOf(k) >= 0 ? ' checked' : '') + '>' +
+        '<span>' + esc(r.name) + ' <small>(' + (r.unit === 'percent' ? '%' : '倍') + ')</small></span></label>';
+    }).join('');
+  }
+  function niceTicks(lo, hi) {
+    if (lo === hi) { lo -= 1; hi += 1; }
+    var span = hi - lo, step = Math.pow(10, Math.floor(Math.log10(span / 4)));
+    [1, 2, 2.5, 5, 10].some(function (m) { if (span / (step * m) <= 5) { step *= m; return true; } return false; });
+    var a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step, t = [];
+    for (var v = a; v <= b + step / 2; v += step) t.push(Number(v.toFixed(6)));
+    return t;
+  }
+  function smoothPath(pts) {
+    if (pts.length < 2) return '';
+    var d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2, k = 0.18;
+      var c1 = [p1[0] + (p2[0] - p0[0]) * k, p1[1] + (p2[1] - p0[1]) * k];
+      var c2 = [p2[0] - (p3[0] - p1[0]) * k, p2[1] - (p3[1] - p1[1]) * k];
+      d += 'C' + c1[0].toFixed(1) + ',' + c1[1].toFixed(1) + ' ' + c2[0].toFixed(1) + ',' + c2[1].toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+    }
+    return d;
+  }
+  function renderTrend(animate) {
+    var svg = $('fa-trend');
+    if (!svg.clientWidth) return;
+    var W = Math.max(300, Math.min(900, Math.round(svg.clientWidth)));
+    var H = W < 420 ? 240 : 270;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var keys = state.keys.filter(function (k) { return TREND_TABS[state.tab].keys.indexOf(k) >= 0; });
+    if (!keys.length) {
+      svg.innerHTML = '<text class="axis-text" x="' + W / 2 + '" y="' + H / 2 + '" text-anchor="middle">请至少勾选一个对比指标</text>';
+      return;
+    }
+    var series = keys.map(function (k, i) {
+      var r = BY_KEY[k];
+      return { r: r, color: PALETTE[TREND_TABS[state.tab].keys.indexOf(k) % PALETTE.length],
+        vals: YEARS.map(function (y) { return r.unit === 'percent' ? r.values[y] * 100 : r.values[y]; }) };
+    });
+    var mixed = series.some(function (s) { return s.r.unit === 'percent'; }) && series.some(function (s) { return s.r.unit === 'ratio'; });
+    var L = 52, R = mixed ? 46 : 20, T = 30, B = 56;
+    function axisFor(unit) {
+      var vs = [];
+      series.forEach(function (s) { if (!mixed || s.r.unit === unit) vs = vs.concat(s.vals); });
+      var lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs), pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.1 || 1;
+      var t = niceTicks(lo - pad, hi + pad);
+      return { t: t, lo: t[0], hi: t[t.length - 1] };
+    }
+    var left = axisFor(mixed ? 'percent' : series[0].r.unit);
+    var right = mixed ? axisFor('ratio') : null;
+    var x = function (i) { return L + i * (W - L - R) / (YEARS.length - 1); };
+    var y = function (v, ax) { return T + (ax.hi - v) / (ax.hi - ax.lo) * (H - T - B); };
+    var leftUnitPct = mixed || series[0].r.unit === 'percent';
+    var h = '';
+    left.t.forEach(function (v) {
+      var gy = y(v, left).toFixed(1);
+      h += '<line class="split" x1="' + L + '" x2="' + (W - R) + '" y1="' + gy + '" y2="' + gy + '"/>';
+      h += '<text class="axis-text" x="' + (L - 8) + '" y="' + gy + '" dy="4" text-anchor="end">' + (+v.toFixed(2)) + (leftUnitPct ? '%' : '') + '</text>';
+    });
+    if (right) right.t.forEach(function (v) {
+      h += '<text class="axis-text" x="' + (W - R + 8) + '" y="' + y(v, right).toFixed(1) + '" dy="4">' + (+v.toFixed(2)) + '</text>';
+    });
+    h += '<line class="axis" x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '"/>';
+    YEARS.forEach(function (yr, i) {
+      h += '<line class="axis" x1="' + x(i) + '" x2="' + x(i) + '" y1="' + (H - B) + '" y2="' + (H - B + 5) + '"/>';
+      h += '<text class="axis-text" x="' + x(i) + '" y="' + (H - B + 20) + '" text-anchor="middle">' + yr + ' 年报</text>';
+    });
+    series.forEach(function (s) {
+      var ax = (mixed && s.r.unit === 'ratio') ? right : left;
+      var pts = s.vals.map(function (v, i) { return [x(i), y(v, ax)]; });
+      h += '<path class="series" stroke="var(' + s.color + ')" d="' + smoothPath(pts) + '"/>';
+      pts.forEach(function (p) { h += '<circle class="sym" stroke="var(' + s.color + ')" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3"/>'; });
+    });
+    // 图例（底部居中）
+    var items = series.map(function (s) { return { s: s, w: 34 + s.r.name.length * 12.5 }; });
+    var total = items.reduce(function (a, b) { return a + b.w; }, 0);
+    var lx = Math.max(4, (W - total) / 2), ly = H - 10;
+    items.forEach(function (it) {
+      h += '<line stroke="var(' + it.s.color + ')" stroke-width="2" x1="' + lx + '" x2="' + (lx + 24) + '" y1="' + (ly - 4) + '" y2="' + (ly - 4) + '"/>';
+      h += '<circle class="sym" stroke="var(' + it.s.color + ')" cx="' + (lx + 12) + '" cy="' + (ly - 4) + '" r="4"/>';
+      h += '<text class="legend-text" x="' + (lx + 29) + '" y="' + ly + '">' + esc(it.s.r.name) + '</text>';
+      lx += it.w + 10;
+    });
+    svg.innerHTML = h;
+    svg.setAttribute('aria-label', '趋势分析：' + series.map(function (s) {
+      return s.r.name + ' ' + YEARS.map(function (yr) { return yr + ' 年报 ' + fmt(s.r, s.r.values[yr]); }).join('、');
+    }).join('；'));
+    if (animate && !reduced()) {
+      svg.querySelectorAll('.series').forEach(function (p) {
+        var len = p.getTotalLength();
+        p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+        p.getBoundingClientRect();
+        p.style.transition = 'stroke-dashoffset .6s ease';
+        p.style.strokeDashoffset = '0';
+      });
     }
   }
 
-  /* ---------------- 渲染：变动结构环图 ---------------- */
-  function renderDonut() {
-    var role = ROLES[state.role];
-    var groups = { improve: [], worse: [], flat: [] };
-    role.kpis.forEach(function (k) {
-      var c = change(BY_KEY[k]);
-      if (groups[c.meaning]) groups[c.meaning].push(BY_KEY[k].name);
-    });
-    var total = role.kpis.length;
-    var C = 2 * Math.PI * 44;
-    var h = '<circle class="track" cx="60" cy="60" r="44"/>';
-    var offset = 0;
-    [['improve', 'is-improve'], ['worse', 'is-worse'], ['flat', 'is-flat']].forEach(function (p) {
-      var n = groups[p[0]].length;
-      if (!n) return;
-      var len = C * n / total;
-      var gap = total > n ? 2 : 0;
-      h += '<circle class="seg ' + p[1] + '" cx="60" cy="60" r="44" transform="rotate(-90 60 60)"' +
-        ' stroke-dasharray="' + Math.max(len - gap, 0).toFixed(2) + ' ' + C.toFixed(2) + '"' +
-        ' stroke-dashoffset="' + (-offset).toFixed(2) + '"/>';
-      offset += len;
-    });
-    h += '<text class="center-num" x="60" y="62" text-anchor="middle">' + total + '</text>';
-    h += '<text class="center-label" x="60" y="78" text-anchor="middle">核心指标</text>';
-    donutSvg.innerHTML = h;
-    donutSvg.setAttribute('aria-label', '较上期变动结构：改善 ' + groups.improve.length + ' 项，需关注 ' + groups.worse.length + ' 项，持平或仅标方向 ' + groups.flat.length + ' 项');
-
-    var rows = [['improve', '改善'], ['worse', '需关注'], ['flat', '持平 / 区间型']];
-    legend.innerHTML = rows.map(function (p) {
-      var list = groups[p[0]];
-      return '<li><i class="is-' + p[0] + '"></i><span>' + p[1] + '</span><b>' + list.length + '</b>' +
-        (list.length ? '<small>' + esc(list.join('、')) + '</small>' : '') + '</li>';
-    }).join('');
-  }
-
-  /* ---------------- 渲染：专业视图全部指标 ---------------- */
   function renderAll() {
-    var role = ROLES[state.role];
-    allBox.hidden = !role.all;
-    if (!role.all) return;
-    var order = ['偿债能力', '盈利能力', '营运能力', '现金流'];
-    allGroups.innerHTML = order.map(function (gName) {
-      var items = RATIOS.filter(function (r) { return r.group === gName; });
-      return '<div class="fa-group"><p class="fa-group-name">' + gName + ' · ' + items.length + ' 项</p>' +
-        items.map(function (r) {
-          var c = change(r);
-          var cls = c.meaning === 'improve' ? 'is-improve' : (c.meaning === 'worse' ? 'is-worse' : 'is-flat');
-          return '<div class="fa-row"><span class="fa-row-name">' + esc(r.name) + '<small>' + esc(r.desc) + '</small></span>' +
-            '<span class="fa-row-val">' + fmt(r, r.values[CUR]) + '</span>' +
-            '<span class="fa-row-delta ' + cls + '">' + arrow(c) + ' ' + c.delta + '</span></div>';
-        }).join('') + '</div>';
+    var box = $('fa-all'), btn = $('fa-all-toggle');
+    box.hidden = !state.showAll;
+    btn.textContent = state.showAll ? '收起全部指标' : '展开全部指标与公式';
+    btn.setAttribute('aria-expanded', String(state.showAll));
+    if (!state.showAll) return;
+    box.innerHTML = ['偿债能力', '盈利能力', '营运能力', '现金流'].map(function (g) {
+      return '<div class="fa-group"><h3 class="fa-group-title">' + g + '</h3><div class="el-table-wrap"><table class="el-table is-stripe">' +
+        '<thead><tr><th>指标</th><th>数值</th><th>状态</th><th>说明</th></tr></thead><tbody>' +
+        RATIOS.filter(function (r) { return r.group === g; }).map(function (r) {
+          var s = signal(r, r.values[CUR]);
+          return '<tr><td>' + esc(r.name) + '</td><td>' + fmt(r, r.values[CUR]) + '</td>' +
+            '<td><span class="el-tag is-small is-plain ' + TAG[s.level] + '">' + s.label + '</span></td>' +
+            '<td class="is-wrap"><span class="fa-table-desc">' + esc(r.desc) + '</span></td></tr>';
+        }).join('') + '</tbody></table></div></div>';
     }).join('');
   }
+  $('fa-all-toggle').addEventListener('click', function () { state.showAll = !state.showAll; renderAll(); });
 
-  function renderAllParts(animateTrend) {
-    renderSummary();
-    renderKpis();
-    renderTrend(animateTrend);
-    renderDonut();
-    renderAll();
+  function renderAnalysis(animate) {
+    renderSummary(); renderKpis(); renderCompare(); renderTrendControls(); renderTrend(animate); renderAll();
   }
 
-  /* ---------------- 交互：视图切换（带过渡） ---------------- */
-  var switchTimer = null;
-  function setRole(role) {
-    if (role === state.role || !ROLES[role]) return;
-    state.role = role;
-    state.trendKey = ROLES[role].kpis[0];
-    roleButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.role === role)); });
-    clearTimeout(switchTimer);
-    if (reduced()) { renderAllParts(false); return; }
-    body.classList.add('is-leaving');
-    switchTimer = setTimeout(function () {
-      renderAllParts(true);
-      body.classList.remove('is-leaving');
-    }, 180);
-  }
-  roleButtons.forEach(function (b) {
-    b.addEventListener('click', function () { setRole(b.dataset.role); });
+  // 视图切换：沿用源码 onRoleChange —— 重置趋势分组与默认勾选，专业全量展开全部指标
+  var body = $('fa-body'), switchTimer = null;
+  app.querySelectorAll('[data-role]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var role = b.dataset.role;
+      if (role === state.role) return;
+      state.role = role;
+      state.tab = ROLES[role].tab;
+      state.keys = TREND_TABS[state.tab].def.slice();
+      state.showAll = ROLES[role].all;
+      state.highlight = null;
+      app.querySelectorAll('[data-role]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.role === role)); });
+      clearTimeout(switchTimer);
+      if (reduced()) { renderAnalysis(false); return; }
+      body.classList.add('is-leaving');
+      switchTimer = setTimeout(function () { renderAnalysis(true); body.classList.remove('is-leaving'); }, 180);
+    });
   });
 
-  // 点击指标卡：切换趋势图指标
-  kpiBox.addEventListener('click', function (e) {
-    var card = e.target.closest('[data-kpi]');
-    if (!card || card.dataset.kpi === state.trendKey) return;
-    state.trendKey = card.dataset.kpi;
-    kpiBox.querySelectorAll('[data-kpi]').forEach(function (c) {
-      c.setAttribute('aria-pressed', String(c.dataset.kpi === state.trendKey));
-    });
+  // 点击指标卡 / 重点变动卡：高亮同一指标（源码 focusMetric，再次点击取消）
+  function focusMetric(key) {
+    state.highlight = state.highlight === key ? null : key;
+    app.querySelectorAll('[data-kpi]').forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.kpi === state.highlight)); });
+    app.querySelectorAll('[data-focus]').forEach(function (c) { c.classList.toggle('active', c.dataset.focus === state.highlight); });
+  }
+  $('fa-kpis').addEventListener('click', function (e) { var c = e.target.closest('[data-kpi]'); if (c) focusMetric(c.dataset.kpi); });
+  $('fa-focus').addEventListener('click', function (e) { var c = e.target.closest('[data-focus]'); if (c) focusMetric(c.dataset.focus); });
+
+  $('fa-trend-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]');
+    if (!b || b.dataset.tab === state.tab) return;
+    state.tab = b.dataset.tab;
+    state.keys = TREND_TABS[state.tab].def.slice();
+    renderTrendControls(); renderTrend(true);
+  });
+  $('fa-trend-checks').addEventListener('change', function () {
+    state.keys = Array.prototype.map.call($('fa-trend-checks').querySelectorAll('input:checked'), function (i) { return i.value; });
     renderTrend(true);
   });
 
-  /* ---------------- 提示条 ---------------- */
-  var toastTimer = null;
-  function toast(msg) {
-    toastEl.textContent = msg;
-    toastEl.classList.add('is-show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('is-show'); }, 2600);
+  /* ================= 年报导入 ================= */
+  var itabs = app.querySelectorAll('[data-itab]');
+  var ipanes = app.querySelectorAll('[data-ipane]');
+  function setITab(name) {
+    itabs.forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.itab === name)); t.tabIndex = t.dataset.itab === name ? 0 : -1; });
+    ipanes.forEach(function (p) { p.hidden = p.dataset.ipane !== name; });
   }
-  app.querySelectorAll('[data-nav]').forEach(function (b) {
-    if (b.hasAttribute('data-open-import')) return;
+  itabs.forEach(function (t) {
+    t.addEventListener('click', function () { setITab(t.dataset.itab); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var list = Array.prototype.slice.call(itabs), i = list.indexOf(t);
+      var n = list[(i + (e.key === 'ArrowRight' ? 1 : list.length - 1)) % list.length];
+      setITab(n.dataset.itab); n.focus();
+    });
+  });
+  setITab('fetch');
+
+  // 在线拉取
+  var year = 2025;
+  app.querySelectorAll('[data-year]').forEach(function (b) {
     b.addEventListener('click', function () {
-      toast('示意原型只还原「比率分析」页，「' + b.dataset.nav + '」未展开');
+      year = Math.max(2015, Math.min(2025, year + Number(b.dataset.year)));
+      $('fa-fetch-year').textContent = year;
+    });
+  });
+  $('fa-fetch-search').addEventListener('click', function () {
+    if (!$('fa-fetch-q').value.trim()) { message('请填写证券代码或公司名称', 'warning'); return; }
+    withLoading('', 900, function () {
+      $('fa-candidate-body').innerHTML = '<tr><td class="is-check"><span class="el-checkbox is-checked" aria-hidden="true"></span></td><td>' + year +
+        '</td><td>A00001</td><td>示例公司A</td><td>示例公司A：' + year + '年年度报告</td><td>' + (year + 1) + '-03-28</td></tr>';
+      $('fa-candidates').hidden = false;
+      message('找到 1 份候选（覆盖 ' + year + ' 年），已默认全选');
+    });
+  });
+  $('fa-fetch-import').addEventListener('click', function () {
+    withLoading('', 1300, function () {
+      message('下载解析完成：成功 1 · 失败 0');
+      setITab('pdf');
+      setStep(1);
     });
   });
 
-  /* ---------------- 导入年报对话框 ---------------- */
-  var overlay = $('fa-overlay');
-  var dialog = overlay.querySelector('.fa-dialog');
-  var panes = overlay.querySelectorAll('[data-pane]');
-  var steps = overlay.querySelectorAll('.fa-steps li');
-  var detail = $('fa-source-detail');
-  var lastFocus = null;
-  var progressTimer = null;
-
-  var SOURCES = {
-    pdf: {
-      detail: '示例文件：示例公司A_2025年年度报告.pdf（拖拽或点击上传 A 股年报 PDF）',
-      stages: ['读取 PDF 文本', '定位三大报表页码（含续页）', '抽取原文科目与金额', '按映射规则匹配标准科目', '生成映射质量报告'],
-      total: 112, mapped: 109, coverage: '96%',
-      review: [
-        { sheet: '资产负债表', item: '其他非流动金融资产', page: 'p.98', why: '续页表头缺失，需确认所属报表与列' },
-        { sheet: '利润表', item: '其中：对联营企业和合营企业的投资收益', page: 'p.103', why: '「其中」明细项，需确认是否单独映射' },
-        { sheet: '现金流量表', item: '收到其他与经营活动有关的现金', page: 'p.107', why: '金额未识别，保留缺失原因' }
-      ]
-    },
-    excel: {
-      detail: '示例文件：示例公司A_三大报表模板.xlsx（按标准模板填写）',
-      stages: ['读取模板工作表', '校验模板字段与期间', '按映射规则匹配标准科目', '生成映射质量报告'],
-      total: 96, mapped: 95, coverage: '100%',
-      review: [
-        { sheet: '利润表', item: '其他综合收益的税后净额', page: 'B42', why: '单元格为空，保留缺失原因' }
-      ]
-    },
-    cninfo: {
-      detail: '检索：示例公司A · 2025 年度报告（支持证券代码或公司名称；下载后人工核对，不自动入库）',
-      stages: ['检索巨潮资讯公告', '下载年度报告全文 PDF', '定位三大报表页码（含续页）', '按映射规则匹配标准科目', '生成映射质量报告'],
-      total: 112, mapped: 110, coverage: '97%',
-      review: [
-        { sheet: '资产负债表', item: '其他非流动金融资产', page: 'p.98', why: '续页表头缺失，需确认所属报表与列' },
-        { sheet: '利润表', item: '其中：对联营企业和合营企业的投资收益', page: 'p.103', why: '「其中」明细项，需确认是否单独映射' }
-      ]
-    }
-  };
-
-  function currentSource() {
-    var el = overlay.querySelector('input[name="fa-source"]:checked');
-    return el ? el.value : 'pdf';
-  }
-  function updateDetail() { detail.textContent = SOURCES[currentSource()].detail; }
-  overlay.querySelectorAll('input[name="fa-source"]').forEach(function (r) {
-    r.addEventListener('change', updateDetail);
-  });
-
-  function showPane(name) {
-    panes.forEach(function (p) { p.hidden = p.dataset.pane !== name; });
-    var stepIndex = { choose: 1, progress: 2, result: 2 }[name];
-    steps.forEach(function (li) {
-      var n = Number(li.dataset.step);
-      li.classList.toggle('is-current', n === stepIndex);
-      li.classList.toggle('is-done', n < stepIndex);
+  // Excel 模板导入
+  $('fa-excel-upload').addEventListener('click', function () {
+    withLoading('', 900, function () {
+      $('fa-excel-preview').hidden = false;
+      message('解析完成，请确认预览后入库');
     });
-  }
-
-  function focusables() {
-    return Array.prototype.filter.call(
-      dialog.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])'),
-      function (el) { return !el.disabled && el.offsetParent !== null; }
-    );
-  }
-
-  function openDialog(trigger) {
-    lastFocus = trigger || document.activeElement;
-    showPane('choose');
-    updateDetail();
-    overlay.hidden = false;
-    var first = overlay.querySelector('input[name="fa-source"]:checked');
-    (first || dialog).focus();
-    // 窄屏时确保对话框在可视范围内
-    var rect = app.getBoundingClientRect();
-    if (rect.top < 0 || rect.top > window.innerHeight * 0.6) {
-      app.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
-    }
-  }
-
-  function closeDialog() {
-    if (overlay.hidden) return;
-    clearInterval(progressTimer);
-    overlay.hidden = true;
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-  }
-
-  app.querySelectorAll('[data-open-import]').forEach(function (b) {
-    b.addEventListener('click', function () { openDialog(b); });
-  });
-  overlay.querySelectorAll('[data-close]').forEach(function (b) {
-    b.addEventListener('click', closeDialog);
-  });
-  // 点击对话框外部（遮罩或页面其他位置）关闭
-  document.addEventListener('mousedown', function (e) {
-    if (!overlay.hidden && !dialog.contains(e.target)) closeDialog();
-  });
-  // Esc 关闭；Tab 焦点留在对话框内
-  document.addEventListener('keydown', function (e) {
-    if (overlay.hidden) return;
-    if (e.key === 'Escape') { e.preventDefault(); closeDialog(); return; }
-    if (e.key !== 'Tab') return;
-    var list = focusables();
-    if (!list.length) return;
-    var first = list[0], last = list[list.length - 1];
-    if (e.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
-    }
   });
 
-  $('fa-start').addEventListener('click', function () {
-    var src = SOURCES[currentSource()];
-    var fill = $('fa-progress-fill');
-    var bar = $('fa-progressbar');
-    var stageText = $('fa-progress-stage');
-    var pctText = $('fa-progress-pct');
-    var list = $('fa-stage-list');
-    list.innerHTML = src.stages.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('');
-    var items = list.querySelectorAll('li');
-    showPane('progress');
-    var cancelBtn = overlay.querySelector('[data-pane="progress"] [data-close]');
-    if (cancelBtn) cancelBtn.focus();
-
-    var pct = 0;
-    var step = reduced() ? 10 : 2;
-    var tick = function () {
-      pct = Math.min(100, pct + step);
-      var idx = Math.min(src.stages.length - 1, Math.floor(pct / (100 / src.stages.length)));
-      fill.style.width = pct + '%';
-      bar.setAttribute('aria-valuenow', String(pct));
-      pctText.textContent = pct + '%';
-      stageText.textContent = pct < 100 ? src.stages[idx] + '…' : '识别完成';
-      items.forEach(function (li, i) {
-        li.classList.toggle('is-done', i < idx || pct >= 100);
-        li.classList.toggle('is-doing', i === idx && pct < 100);
-      });
-      if (pct >= 100) {
-        clearInterval(progressTimer);
-        setTimeout(function () { if (!overlay.hidden) showResult(src); }, reduced() ? 0 : 350);
-      }
-    };
-    fill.style.width = '0%';
-    clearInterval(progressTimer);
-    progressTimer = setInterval(tick, 45);
-  });
-
-  function showResult(src) {
-    var n = src.review.length;
-    $('fa-result-title').innerHTML = '已映射到标准科目 ' + src.mapped + ' 项，<b>' + n + ' 项需人工复核</b>';
-    $('fa-quality').innerHTML =
-      '<div><strong>' + src.total + '</strong><span>识别原文科目</span></div>' +
-      '<div><strong>' + src.coverage + '</strong><span>核心科目覆盖</span></div>' +
-      '<div><strong>' + n + '</strong><span>待复核</span></div>';
-    $('fa-review').innerHTML = src.review.map(function (r) {
-      return '<li><strong>' + esc(r.item) + '</strong><span class="pg">' + esc(r.sheet) + ' · ' + esc(r.page) + '</span>' +
-        '<span class="why">' + esc(r.why) + '</span></li>';
+  // 年报 PDF 导入：el-steps + el-upload + 映射质量
+  var UNMAPPED = [
+    { kind: '资产负债表', label: '其他非流动金融资产（续）', amount: '3,260,000.00', page: 98, reason: '无别名匹配' },
+    { kind: '利润表', label: '其中：对联营企业和合营企业的投资收益', amount: '1,180,000.00', page: 103, reason: '多科目歧义' },
+    { kind: '现金流量表', label: '收到其他与经营活动有关的现金', amount: '2,450,000.00', page: 107, reason: '匹配分过低' }
+  ];
+  function renderUnmapped(kind) {
+    $('fa-unmapped-body').innerHTML = UNMAPPED.filter(function (u) { return kind === 'all' || u.kind === kind; }).map(function (u) {
+      return '<tr><td>' + u.kind + '</td><td>' + esc(u.label) + '</td><td class="is-right">' + u.amount + '</td><td class="is-center">' + u.page +
+        '</td><td><span class="el-tag is-small is-info is-plain">' + u.reason + '</span></td></tr>';
     }).join('');
-    showPane('result');
-    $('fa-go-review').focus();
+    app.querySelectorAll('[data-kind]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.kind === kind)); });
   }
+  $('fa-unmapped-filter').addEventListener('click', function (e) { var b = e.target.closest('[data-kind]'); if (b) renderUnmapped(b.dataset.kind); });
 
-  $('fa-go-review').addEventListener('click', function () {
-    closeDialog();
-    toast('示意：复核与入库需在真实系统中完成，此处不写入数据');
+  var CHECK = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function setStep(step) {
+    app.querySelectorAll('#fa-steps .el-step').forEach(function (li, i) {
+      // 与 el-steps :active="step" finish-status="success" 一致：之前的步骤完成，当前步骤为进行中
+      li.classList.toggle('is-success', i < step);
+      li.classList.toggle('is-process', i === step);
+      li.querySelector('.el-step__icon').innerHTML = i < step ? CHECK : String(i + 1);
+    });
+    $('fa-pdf-upload').hidden = step !== 0;
+    $('fa-pdf-review').hidden = step === 0;
+    var committed = step === 2;
+    var alert = $('fa-review-alert');
+    alert.className = 'el-alert ' + (committed ? 'is-success' : 'is-info');
+    $('fa-review-status').textContent = '状态：' + (committed ? 'committed' : 'review') + ' · 需人工核对后入库 · 覆盖 96%';
+    $('fa-save').disabled = committed;
+    $('fa-commit').disabled = committed;
+    $('fa-goto-statements').hidden = !committed;
+    if (step === 1) renderUnmapped('all');
+  }
+  setStep(0);
+  $('fa-pdf-dragger').addEventListener('click', function () {
+    withLoading('', 1300, function () { setStep(1); message('已解析，请核对后确认入库'); });
+  });
+  $('fa-save').addEventListener('click', function () { message('已更新'); });
+  $('fa-commit').addEventListener('click', function () {
+    withLoading('', 800, function () { setStep(2); message('已入库 · 2025 年报（示意，未写入数据）'); });
   });
 
   /* ---------------- 初始渲染 ---------------- */
-  renderAllParts(false);
-
-  var resizeTimer = null;
-  var lastW = trendSvg.clientWidth;
+  renderAnalysis(false);
+  var resizeTimer = null, lastW = $('fa-trend').clientWidth;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
-      if (Math.abs(trendSvg.clientWidth - lastW) < 8) return;
-      lastW = trendSvg.clientWidth;
-      renderTrend(false);
+      var w = $('fa-trend').clientWidth;
+      if (Math.abs(w - lastW) < 8) return;
+      lastW = w; renderTrend(false);
     }, 150);
   });
 })();

@@ -78,81 +78,37 @@
     <section class="section" id="prototype">
       <p class="eyebrow">Prototype</p>
       <h2 class="section-title">交互原型</h2>
-      <p class="prose vw-guide">先点「让 Agent 试做」，看它跑通任务后拆成节点；再点击任一节点查看配置或添加注释；最后点「交给 Agent」，在右侧的修改提案里选择接受或拒绝。</p>
-      <div class="stage">
-        <div class="mock-window" role="region" aria-label="插件界面示意">
-          <div class="mock-titlebar"><i></i><i></i><i></i><span>DeepSeek Harness · 工作流</span></div>
-
+      <p class="prose vw-guide">还原插件的全屏画布页。点击节点在右侧查看配置；左侧「+」打开节点面板添加节点；选中节点后可「添加注释」；点「查看修改」审阅 Agent 提交的修改提案；点「执行」看节点依次运行。想从头看流程怎么来的，可以点「让 Agent 试做」。</p>
+      <div class="vw-demo-bar" role="group" aria-label="演示入口">
+        <span class="vw-demo-label">演示入口</span>
+        <button type="button" class="btn btn-primary vw-demo-btn" id="vw-demo-trial">让 Agent 试做</button>
+        <button type="button" class="btn vw-demo-btn" id="vw-demo-reset">恢复示例流程</button>
+      </div>
+      <div class="stage vw-stage">
+        <div class="mock-window vw-window" role="region" aria-label="插件界面示意：工作流画布">
+          <div class="mock-titlebar vw-titlebar"><i></i><i></i><i></i><span class="vw-tab">工作流</span></div>
           <div class="vw-app" id="vw-app">
-            <div class="vw-head">
-              <button class="vw-back" type="button" id="vw-back" aria-label="返回工作流主页">
-                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg>工作流
-              </button>
-              <strong class="vw-title" title="网页要点摘要">网页要点摘要</strong>
-              <span class="vw-save" id="vw-save">尚未创建</span>
-              <div class="vw-head-actions">
-                <span class="vw-note-chip" id="vw-note-chip" hidden></span>
-                <button class="vw-btn" type="button" id="vw-agent" disabled>
-                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5a2.5 2.5 0 0 0-2.4 3.2A2.5 2.5 0 0 0 4 10.5 2.5 2.5 0 0 0 8 12V3.5A2 2 0 0 0 6 2.5Z"/><path d="M10 2.5a2.5 2.5 0 0 1 2.4 3.2 2.5 2.5 0 0 1-.4 4.8A2.5 2.5 0 0 1 8 12"/></svg>交给 Agent
-                </button>
-                <button class="vw-btn vw-btn-primary" type="button" id="vw-run" disabled>
-                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5-7-4.5Z"/></svg>执行
-                </button>
+            <div class="vw-viewport" id="vw-viewport" role="group" aria-label="工作流画布">
+              <div class="vw-world" id="vw-world">
+                <svg class="vw-edges" id="vw-edges" aria-hidden="true"></svg>
+                <div class="vw-stickies" id="vw-stickies"></div>
+                <div class="vw-nodes" id="vw-nodes"></div>
               </div>
             </div>
-
-            <div class="vw-body">
-              <div class="vw-canvas-wrap" id="vw-canvas-wrap">
-                <div class="vw-canvas" id="vw-canvas" role="group" aria-label="工作流画布">
-                  <div class="vw-sizer" id="vw-sizer">
-                    <div class="vw-board" id="vw-board">
-                      <svg class="vw-edges" id="vw-edges" aria-hidden="true">
-                        <defs>
-                          <marker id="vw-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                            <path d="M0 0 8 4 0 8Z"/>
-                          </marker>
-                        </defs>
-                        <g id="vw-edge-layer"></g>
-                      </svg>
-                      <div class="vw-nodes" id="vw-nodes"></div>
-                    </div>
-                  </div>
-                  <div class="vw-empty" id="vw-empty">
-                    <svg viewBox="0 0 48 32" aria-hidden="true"><rect x="2" y="9" width="14" height="14" rx="3"/><rect x="32" y="9" width="14" height="14" rx="3"/><path d="M16 16h16"/></svg>
-                    <p>还没有流程。先让 Agent 把任务真实做一遍。</p>
-                  </div>
-                </div>
-                <div class="vw-canvas-foot">
-                  <span class="vw-count" id="vw-count">0 个节点 · 尚未运行</span>
-                  <div class="vw-zoom" role="group" aria-label="画布缩放">
-                    <button type="button" class="vw-icon-btn" id="vw-zoom-out" aria-label="缩小画布"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg></button>
-                    <span class="vw-zoom-value" id="vw-zoom-value" aria-live="polite">100%</span>
-                    <button type="button" class="vw-icon-btn" id="vw-zoom-in" aria-label="放大画布"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8M8 4v8"/></svg></button>
-                    <button type="button" class="vw-text-btn" id="vw-zoom-fit">适应画布</button>
-                  </div>
-                </div>
-
-                <div class="vw-pop" id="vw-pop" role="dialog" aria-labelledby="vw-pop-title" hidden>
-                  <div class="vw-pop-head">
-                    <h3 id="vw-pop-title">节点配置</h3>
-                    <button type="button" class="vw-icon-btn" id="vw-pop-close" aria-label="关闭节点配置"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></button>
-                  </div>
-                  <dl class="vw-pop-meta" id="vw-pop-meta"></dl>
-                  <div class="vw-pop-fields" id="vw-pop-fields"></div>
-                  <div class="vw-pop-note">
-                    <label for="vw-note-input">添加注释</label>
-                    <textarea id="vw-note-input" rows="2" placeholder="添加注释…" maxlength="80"></textarea>
-                    <div class="vw-pop-actions">
-                      <button type="button" class="vw-btn vw-btn-sm" id="vw-note-cancel">取消</button>
-                      <button type="button" class="vw-btn vw-btn-sm vw-btn-primary" id="vw-note-save">保存</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <aside class="vw-dock" id="vw-dock" aria-label="任务与修改请求"></aside>
+            <div class="vw-float" id="vw-float" hidden></div>
+            <div class="vw-chrome vw-top-left" id="vw-top-left"></div>
+            <div class="vw-chrome vw-top-right" id="vw-top-right"></div>
+            <nav class="vw-chrome vw-toolbar" id="vw-toolbar" aria-label="画布工具栏"></nav>
+            <section class="vw-picker" id="vw-picker" aria-label="添加节点面板" hidden></section>
+            <div class="vw-side" id="vw-side">
+              <section class="vw-notice" id="vw-notice" hidden></section>
+              <section class="vw-config" id="vw-config" aria-label="节点配置" hidden></section>
             </div>
-
+            <div class="vw-chrome vw-bottom-left" id="vw-bottom-left"></div>
+            <div class="vw-bottom-right" id="vw-bottom-right"></div>
+            <div class="vw-pop" id="vw-note-pop" role="dialog" aria-labelledby="vw-note-title" hidden></div>
+            <div class="vw-pop vw-runs" id="vw-runs" role="dialog" aria-label="运行记录" hidden></div>
+            <div class="vw-modal-backdrop" id="vw-modal" hidden></div>
             <div class="vw-toast" id="vw-toast" role="status" aria-live="polite"></div>
           </div>
         </div>
@@ -167,7 +123,7 @@
         <li><strong>从问题出发定义需求：</strong>梳理 Agent 长任务里“看不清、画不动、改不准、留不下”四个问题，提出产品思路，并把它定位为运行在 DeepSeek Harness 中、基于 Graphon 执行的插件。</li>
         <li><strong>与 AI Agent 协作撰写 2 版 PRD：</strong>v0.4 设计讨论稿（2026-10-14）提出问题与交互设想；v2.0 需求整合稿（2026-10-16）结合三方竞品横向对比确定方案，按 P0—P2 分期规划交付，设 36 项验收编号（AC-01～AC-36）。</li>
         <li><strong>提出“先试后建”：</strong>让 Agent 先真实试做、跑通后再拆成流程，由试做记录自动生成流程骨架与草稿，避免先凭空设计一张跑不通的图。</li>
-        <li><strong>用标准模板降低出错：</strong>把节点配置固化为模板，AI 只填业务字段，由后端校验。受控对照中两组各 40 次均成功，模型请求 80→40，修复次数 14→0，Token 约降 52%；对照组是项目内另一方案，耗时未稳定达标，不作为提速结论。</li>
+        <li><strong>用标准模板降低出错：</strong>把节点配置固化为模板，AI 只填业务字段，由后端校验。受控对照中两组各 40 次均成功，模型请求 80→40，修复次数 14→0，Token 约降 52%；对照组是项目内另一方案，耗时未稳定达标，未计入上述结果。</li>
         <li><strong>设计变更审核：</strong>修改流程先生成待接受的提案，校验版本与固定节点；审核先于写入，退回时目标文件不变。</li>
         <li><strong>选定可组合模块方案：</strong>由 AI 调研 7 个工作流平台后，我选定可组合模块方案，并沉淀了片段模块。</li>
         <li><strong>组织协作开发与验收：</strong>拆分任务交给 AI Agent 实现，按验收编号逐项对照，自动测试与真实宿主验收分开记录，未达标项继续跟踪。</li>
