@@ -1,2 +1,12 @@
 .DS_Store
 .claude/
+tools/demos/financial-analysis/node_modules/
+tools/demos/financial-analysis/.cache/
+
+# CLI Worker Now demo build (tools only; output lives in projects/cliworker-now/demo)
+tools/demos/cliworker-now/node_modules/
+tools/demos/cliworker-now/.cache/
+
+# Visible Workflow demo build (tools only; output lives in projects/visible-workflow/demo)
+tools/demos/visible-workflow/node_modules/
+tools/demos/visible-workflow/.cache/

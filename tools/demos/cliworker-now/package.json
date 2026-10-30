@@ -1,0 +1,32 @@
+{
+  "name": "cliworker-now-demo-build",
+  "private": true,
+  "type": "module",
+  "description": "Builds the static CLI Worker Now demo for the portfolio from the plugin's real client components.",
+  "scripts": {
+    "build": "node build.mjs",
+    "verify": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@shikijs/langs": "^3.23.0",
+    "anser": "^2.3.5",
+    "clsx": "^2.1.1",
+    "diff": "^9.0.0",
+    "esbuild": "0.27.7",
+    "katex": "^0.16.47",
+    "mdast-util-from-markdown": "^2.1.0",
+    "mdast-util-gfm": "^3.1.0",
+    "mdast-util-math": "^3.0.0",
+    "micromark-core-commonmark": "^2.0.4",
+    "micromark-extension-gfm": "^3.0.0",
+    "micromark-extension-math": "^3.1.0",
+    "micromark-factory-space": "^2.1.0",
+    "micromark-util-character": "^2.1.1",
+    "micromark-util-classify-character": "^2.0.1",
+    "micromark-util-sanitize-uri": "^2.0.1",
+    "micromark-util-symbol": "^2.0.1",
+    "puppeteer-core": "24.10.0",
+    "shiki": "^3.23.0",
+    "simple-icons": "^16.36.0"
+  }
+}

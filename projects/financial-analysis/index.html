@@ -4,360 +4,95 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>财务分析系统 · 李依伦作品集</title>
-  <meta name="description" content="AI Agent 协作开发的财务分析系统与可视化看板：导入上市公司年报，映射到标准会计科目，计算 4 类 13 项财务比率，并为管理层、投资人和专业人员提供 3 类视图。">
+  <meta name="description" content="与 AI Agent 协作开发的财务分析系统：导入上市公司年报，映射到标准会计科目并计算财务比率，按管理层、投资人和专业人员分层呈现。">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../../assets/css/site.css">
-  <link rel="stylesheet" href="prototype.css">
   <script src="../../assets/js/site.js" defer></script>
-  <script src="prototype.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="../../index.html">李依伦</a>
-      <nav class="nav">
-        <a href="../../index.html#works">作品</a>
-        <a href="../../index.html#about" class="nav-text">关于我</a>
-        <a href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub</a>
+    <div class="wrap-wide bar">
+      <a class="brand" href="../../index.html"><span class="brand-mark" aria-hidden="true">李</span>李依伦</a>
+      <nav class="nav" aria-label="作品">
+        <a href="../cliworker-now/index.html" class="nav-hide">CLI Worker Now</a>
+        <a href="../visible-workflow/index.html" class="nav-hide">Visible Workflow</a>
+        <a href="index.html" aria-current="page">财务分析系统</a>
         <button class="theme-toggle" type="button" aria-label="切换深浅色">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         </button>
       </nav>
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="wrap-wide">
     <section class="project-hero">
-      <p class="breadcrumb"><a href="../../index.html#works">作品</a> / 财务分析系统</p>
-      <p class="eyebrow">个人项目 · 2026.03–2026.07</p>
-      <h1>财务分析系统</h1>
-      <p class="lead">一套与 AI Agent 协作开发的财务分析系统与可视化看板：导入上市公司年报，映射到标准会计科目并计算财务比率，再按管理层、投资人和专业人员的关注点分层呈现。</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="https://github.com/SuperWheel/Web_Financial_Analyse" target="_blank" rel="noopener">项目主页（GitHub）</a>
-        <a class="btn" href="#prototype">看交互原型</a>
+      <div>
+        <p class="kicker">03 · 个人项目 · 2026.03–2026.07</p>
+        <h1>财务分析系统</h1>
+        <p class="lead">一套与 AI Agent 协作开发的财务分析系统与可视化看板：导入上市公司年报，映射到标准会计科目并计算财务比率，再按管理层、投资人和专业人员的关注点分层呈现。</p>
       </div>
-      <dl class="meta-list">
-        <div><dt>时间</dt><dd>2026.03–2026.07</dd></div>
-        <div><dt>我的角色</dt><dd>需求定义、口径与流程设计、组织 AI Agent 协作开发、测试验收</dd></div>
-        <div><dt>技术与平台</dt><dd>FastAPI + SQLite + Vue3 + Element Plus + ECharts</dd></div>
-        <div><dt>当前状态</dt><dd>个人 AI Agent 协作开发项目，本地运行</dd></div>
-      </dl>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#demo">试用交互原型</a>
+        <a class="btn" href="https://github.com/SuperWheel/Web_Financial_Analyse" target="_blank" rel="noopener">项目主页（GitHub）</a>
+      </div>
     </section>
 
-    <section class="section">
-      <p class="eyebrow">Overview</p>
-      <h2 class="section-title">项目简介</h2>
-      <div class="prose">
-        <p>上市公司年报里的三大报表散落在 PDF 的不同页码上，同一个科目在不同公司的叫法和披露口径也不完全一致。直接拿原文算比率，口径难统一；全部归并成标准科目，又不容易回到原文核对。</p>
-        <p>我本硕都读会计学，这个项目是把财务分析口径落到产品规则上的一次尝试：系统支持 PDF、Excel、巨潮资讯 3 种来源导入三大报表，原文披露数据与标准会计科目分两层存储，计算 4 类 13 项财务比率，并为不同读者设计 3 类视图。归母与合并口径怎么取、缺失时怎么回退，都写成了明确的规则。</p>
-        <p>我负责需求定义、口径与流程设计和测试验收，组织 AI Agent 协作完成开发。后端用 FastAPI + SQLite，前端用 Vue3 + Element Plus + ECharts，单机本地运行。</p>
-      </div>
+    <dl class="facts">
+      <div><dt>我的角色</dt><dd>需求定义、口径与流程设计、组织 AI Agent 协作开发、测试验收</dd></div>
+      <div><dt>技术与平台</dt><dd>FastAPI + SQLite + Vue3 + Element Plus + ECharts</dd></div>
+      <div><dt>时间</dt><dd>2026.03–2026.07</dd></div>
+      <div><dt>当前状态</dt><dd>个人项目，本地运行</dd></div>
+    </dl>
 
-      <ol class="fa-flow reveal" aria-label="数据处理流程">
-        <li><span class="fa-flow-step">01</span><strong>年报来源</strong><span>PDF · Excel · 巨潮资讯</span></li>
-        <li><span class="fa-flow-step">02</span><strong>原文披露层</strong><span>保留原文科目、金额与页码</span></li>
-        <li class="is-accent"><span class="fa-flow-step">03</span><strong>映射规则</strong><span>自动映射 + 人工复核边界</span></li>
-        <li><span class="fa-flow-step">04</span><strong>标准科目层</strong><span>统一口径的三大报表</span></li>
-        <li><span class="fa-flow-step">05</span><strong>比率与视图</strong><span>4 类 13 项比率 · 3 类视图</span></li>
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="demo-head">
+        <div>
+          <strong id="demo-title">交互原型</strong>
+          <p>按真实系统界面搭建，公司与报表数据均为示例，不连接后端。</p>
+        </div>
+        <a class="btn" href="demo/index.html#/analysis" target="_blank" rel="noopener">在新窗口打开</a>
+      </div>
+      <div class="demo-viewport">
+        <iframe src="demo/index.html#/analysis" title="财务分析系统交互原型" loading="lazy"></iframe>
+      </div>
+      <ol class="demo-tries">
+        <li><strong>切换视图：</strong>在比率分析页切换管理层、投资人与专业全量视图，看指标卡与图表如何变化。</li>
+        <li><strong>看指标口径：</strong>鼠标停在指标卡上查看计算口径，点击指标卡高亮对应的重点变动。</li>
+        <li><strong>导入年报：</strong>从左侧菜单进入年报导入，上传示例文件或从巨潮检索，走一遍识别、核对与入库。</li>
       </ol>
     </section>
 
-    <section class="section" id="prototype">
-      <p class="eyebrow">Prototype</p>
-      <h2 class="section-title">交互原型</h2>
-      <p class="prose fa-intro">按项目 README 里的真实界面截图和前端源码还原了「比率分析」与「年报导入」两页：左侧深色菜单、白色顶栏、Element Plus 组件和配色都与原系统一致。可以试试：切换<strong>管理层 / 投资人 / 专业全量</strong>视图；鼠标停在指标卡上看口径，点击指标卡高亮对应的重点变动；在左侧菜单进入<strong>年报导入</strong>，上传示例 PDF 或从巨潮检索，走一遍识别、核对与入库。</p>
-      <div class="stage">
-        <div class="mock-window fa-window" role="region" aria-label="财务分析系统界面示意">
-          <div class="mock-titlebar"><i></i><i></i><i></i><span>财务分析系统 · 127.0.0.1:5173</span></div>
-
-          <div class="fa-app" id="fa-app">
-            <aside class="fa-aside" aria-label="系统菜单">
-              <div class="fa-logo"><span class="fa-logo-full">财务分析系统</span><span class="fa-logo-mini" aria-hidden="true">财</span></div>
-              <ul class="fa-menu">
-                <li><button type="button" class="fa-menu-item" data-page="dashboard" title="仪表盘">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16a7.5 7.5 0 1 1 15 0"/><path d="M12 16l3.5-4.5"/><circle cx="12" cy="16" r="1.2"/></svg><span>仪表盘</span></button></li>
-                <li><button type="button" class="fa-menu-item" data-page="statements" title="三大报表">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>三大报表</span></button></li>
-                <li><button type="button" class="fa-menu-item" data-page="import" title="年报导入">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 20h14"/></svg><span>年报导入</span></button></li>
-                <li><button type="button" class="fa-menu-item is-active" data-page="analysis" aria-current="page" title="比率分析">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M7 15.5l3.2-3.4 2.8 2.2L17 9.5"/></svg><span>比率分析</span></button></li>
-                <li><button type="button" class="fa-menu-item" data-page="compare" title="多期对比">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1"/><path d="M9 20h6M12 15v5M8.5 11.5V9.5M12 11.5V8M15.5 11.5v-1"/></svg><span>多期对比</span></button></li>
-              </ul>
-            </aside>
-
-            <div class="fa-container">
-              <header class="fa-header">
-                <span class="fa-header-title" id="fa-header-title">比率分析</span>
-                <span class="fa-demo-badge">示意数据</span>
-              </header>
-
-              <div class="fa-main" id="fa-main">
-                <!-- ========== 比率分析 ========== -->
-                <div class="fa-page" data-view="analysis">
-                  <div class="fa-toolbar">
-                    <span class="el-select fa-w-company" aria-label="企业">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
-                    <span class="el-select fa-w-period" aria-label="报告期">2025 年报<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span>
-                    <span class="el-tag is-info is-plain">数据期 2025 年报 · 完整度 13/13</span>
-                    <div class="el-radio-group is-small" role="group" aria-label="视图切换">
-                      <button type="button" data-role="manager" aria-pressed="false">管理层</button>
-                      <button type="button" data-role="investor" aria-pressed="true">投资人</button>
-                      <button type="button" data-role="pro" aria-pressed="false">专业全量</button>
-                    </div>
-                    <div class="fa-toolbar-actions">
-                      <button type="button" class="el-button is-small" data-msg="示意：导出 HTML 快照需在真实系统中进行">导出 HTML 快照</button>
-                      <button type="button" class="el-button is-small is-success is-plain" data-msg="示意：导出 Excel 需在真实系统中进行">导出 Excel</button>
-                      <button type="button" class="el-button is-small is-primary is-plain" data-msg="示意：打印 / PDF 需在真实系统中进行">打印 / PDF</button>
-                    </div>
-                  </div>
-
-                  <div class="fa-body" id="fa-body">
-                    <div class="el-card fa-summary">
-                      <div class="fa-summary-head">
-                        <div>
-                          <div class="fa-summary-title">示例公司A · 2025 年报</div>
-                          <div class="fa-summary-sub" id="fa-summary-sub"></div>
-                        </div>
-                        <span class="el-tag is-large is-dark is-success" id="fa-summary-badge">整体稳健</span>
-                      </div>
-                      <ul class="fa-summary-lines" id="fa-summary-lines"></ul>
-                    </div>
-
-                    <div class="fa-section-label">核心指标</div>
-                    <div class="fa-kpis" id="fa-kpis"></div>
-
-                    <div class="el-card fa-compare">
-                      <div class="el-card__header fa-compare-head"><span>较上期变动</span><span class="fa-text-info">2024 年报 → 2025 年报</span></div>
-                      <div class="el-card__body">
-                        <div class="fa-compare-grid">
-                          <div class="fa-module">
-                            <div class="fa-module-title">变动结构</div>
-                            <div class="fa-module-sub">悬停扇区可看具体指标与变动</div>
-                            <div class="fa-donut-host">
-                              <svg class="fa-donut" id="fa-donut" viewBox="0 0 260 200" role="img" aria-label="变动结构环图"></svg>
-                              <div class="fa-chart-tip" id="fa-donut-tip" hidden></div>
-                            </div>
-                            <div class="fa-stat-chips" id="fa-stat-chips"></div>
-                          </div>
-                          <div class="fa-module">
-                            <div class="fa-module-title">重点变动</div>
-                            <div class="fa-module-sub">点卡高亮上方 KPI · 哑铃=上期→本期</div>
-                            <div class="fa-focus-grid" id="fa-focus"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="el-card fa-trend-card">
-                      <div class="el-card__header">
-                        <div class="fa-trend-head">
-                          <span class="fa-section-label is-inline">趋势分析</span>
-                          <div class="el-radio-group is-small" role="group" aria-label="趋势分组" id="fa-trend-tabs">
-                            <button type="button" data-tab="profit">盈利</button>
-                            <button type="button" data-tab="solvency">偿债</button>
-                            <button type="button" data-tab="ops_cash">营运与现金流</button>
-                          </div>
-                        </div>
-                        <div class="fa-trend-select"><span class="fa-trend-select-label">对比指标</span><div class="fa-checks" id="fa-trend-checks"></div></div>
-                      </div>
-                      <div class="el-card__body">
-                        <svg class="fa-trend" id="fa-trend" viewBox="0 0 600 260" role="img" aria-label="趋势折线图"></svg>
-                      </div>
-                    </div>
-
-                    <div class="fa-all-toggle"><button type="button" class="el-button is-text is-primary" id="fa-all-toggle" aria-expanded="false">展开全部指标与公式</button></div>
-                    <div id="fa-all" hidden></div>
-                  </div>
-                </div>
-
-                <!-- ========== 年报导入 ========== -->
-                <div class="fa-page" data-view="import" hidden>
-                  <div class="fa-import-page">
-                    <div class="el-tabs" role="tablist" aria-label="导入方式">
-                      <button type="button" role="tab" class="el-tabs__item" data-itab="fetch" aria-selected="true">在线拉取</button>
-                      <button type="button" role="tab" class="el-tabs__item" data-itab="excel" aria-selected="false">Excel 模板导入</button>
-                      <button type="button" role="tab" class="el-tabs__item" data-itab="pdf" aria-selected="false">年报 PDF 导入</button>
-                    </div>
-
-                    <!-- 在线拉取 -->
-                    <div class="fa-ipane" data-ipane="fetch" role="tabpanel">
-                      <div class="el-alert is-info">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
-                        <span>支持证券代码或公司名称（全称会自动回退简称）。A 股走巨潮公开披露；下载后人工核对，不自动入库。请控制频率。</span>
-                      </div>
-                      <div class="el-form-item"><span class="el-form-item__label">关联企业</span><span class="el-select fa-w-assoc">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
-                      <div class="el-card fa-fetch-card">
-                        <div class="el-card__header"><strong>巨潮 · 代码 / 公司名称 + 年份</strong></div>
-                        <div class="el-card__body">
-                          <div class="fa-fetch-row">
-                            <input class="el-input" id="fa-fetch-q" type="text" value="示例公司A" aria-label="证券代码或公司名称">
-                            <div class="el-input-number" aria-label="年份">
-                              <button type="button" data-year="-1" aria-label="减少年份">−</button>
-                              <span id="fa-fetch-year">2025</span>
-                              <button type="button" data-year="1" aria-label="增加年份">+</button>
-                            </div>
-                            <button type="button" class="el-button is-primary" id="fa-fetch-search">检索年报</button>
-                          </div>
-                          <p class="fa-sub-tip">先匹配证券（名称支持全称），再列出该年「年度报告」全文（自动排除摘要/英文）。</p>
-                          <div class="fa-candidates" id="fa-candidates" hidden>
-                            <div class="fa-fetch-row">
-                              <button type="button" class="el-button is-success is-small" id="fa-fetch-import">导入勾选（1）</button>
-                            </div>
-                            <div class="el-table-wrap">
-                              <table class="el-table">
-                                <thead><tr><th class="is-check"><span class="el-checkbox is-checked" aria-hidden="true"></span></th><th>年份</th><th>代码</th><th>简称</th><th>标题</th><th>公告日</th></tr></thead>
-                                <tbody id="fa-candidate-body"></tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="el-card fa-fetch-card">
-                        <div class="el-card__header"><strong>PDF 直链</strong></div>
-                        <div class="el-card__body">
-                          <input class="el-input" type="text" placeholder="https://.../*.pdf" aria-label="PDF 直链">
-                          <button type="button" class="el-button is-primary is-plain fa-mt" data-msg="示意：请使用上方「检索年报」或「年报 PDF 导入」">下载并解析</button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Excel 模板导入 -->
-                    <div class="fa-ipane" data-ipane="excel" role="tabpanel" hidden>
-                      <div class="el-alert is-info">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
-                        <span>下载模板 → 填写三表金额 → 上传预览 → 确认入库。财务比率 sheet 会被忽略（入库后动态计算）。</span>
-                      </div>
-                      <div class="el-form-item"><span class="el-form-item__label">目标企业</span><span class="el-select fa-w-assoc">示例公司A<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
-                      <div class="el-form-item"><span class="el-form-item__label">模板期间</span>
-                        <div class="el-radio-group" role="group" aria-label="模板期间"><button type="button" aria-pressed="true" class="is-static">年报</button><button type="button" aria-pressed="false" class="is-static">季报</button></div>
-                      </div>
-                      <button type="button" class="el-upload-dragger" id="fa-excel-upload">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" class="fa-upload-icon"><path d="M12 15V5M7.5 9.5 12 5l4.5 4.5"/><path d="M5 15v4h14v-4"/></svg>
-                        <span class="fa-upload-tip">拖拽或点击上传已填好的 .xlsx</span>
-                        <span class="fa-upload-sub">也可上传本系统「导出 Excel」生成的文件（比率 sheet 自动忽略）</span>
-                      </button>
-                      <div id="fa-excel-preview" hidden>
-                        <h4 class="fa-h4">预览</h4>
-                        <div class="el-table-wrap">
-                          <table class="el-table">
-                            <thead><tr><th>报表</th><th>科目行</th><th>非空单元格</th><th>期间</th></tr></thead>
-                            <tbody>
-                              <tr><td>资产负债表</td><td>48</td><td>47</td><td>2025 年报</td></tr>
-                              <tr><td>利润表</td><td>28</td><td>27</td><td>2025 年报</td></tr>
-                              <tr><td>现金流量表</td><td>24</td><td>24</td><td>2025 年报</td></tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="fa-actions"><button type="button" class="el-button is-primary" data-msg="示意：入库需在真实系统中完成，此处不写入数据">确认入库</button></div>
-                      </div>
-                    </div>
-
-                    <!-- 年报 PDF 导入 -->
-                    <div class="fa-ipane" data-ipane="pdf" role="tabpanel" hidden>
-                      <ol class="el-steps" id="fa-steps" aria-label="导入步骤">
-                        <li class="el-step"><span class="el-step__icon">1</span><span class="el-step__title">上传 / 在线拉取</span></li>
-                        <li class="el-step"><span class="el-step__icon">2</span><span class="el-step__title">识别与核对</span></li>
-                        <li class="el-step"><span class="el-step__icon">3</span><span class="el-step__title">入库完成</span></li>
-                      </ol>
-
-                      <div id="fa-pdf-upload">
-                        <button type="button" class="el-upload-dragger" id="fa-pdf-dragger">
-                          <svg viewBox="0 0 24 24" aria-hidden="true" class="fa-upload-icon"><path d="M6.5 3h8l4 4v14h-12z"/><path d="M14.5 3v4h4"/></svg>
-                          <span class="fa-upload-tip">拖拽或点击上传 A 股年报 PDF</span>
-                          <span class="fa-upload-sub">也可在「在线拉取」勾选下载后自动进入本页核对</span>
-                        </button>
-                      </div>
-
-                      <div id="fa-pdf-review" hidden>
-                        <div class="el-alert" id="fa-review-alert">
-                          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" class="fill"/><path d="M12 11v5M12 8v.5" class="mark"/></svg>
-                          <span id="fa-review-status"></span>
-                        </div>
-                        <div class="fa-meta-form">
-                          <div class="el-form-item"><span class="el-form-item__label">公司名</span><span class="el-input is-readonly fa-w-assoc">示例公司A</span></div>
-                          <div class="el-form-item"><span class="el-form-item__label">年份</span><span class="el-input is-readonly fa-w-year">2025</span></div>
-                          <div class="el-form-item"><span class="el-form-item__label">期间</span><span class="el-select fa-w-kind">年报<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></span></div>
-                        </div>
-
-                        <div class="fa-quality">
-                          <div class="fa-quality-head">
-                            <h4>映射质量</h4>
-                            <span class="el-tag is-dark is-success">核心科目覆盖 96%</span>
-                            <span class="el-tag is-info is-plain">置信度 88%</span>
-                            <span class="el-tag is-warning is-plain">未映射 3</span>
-                          </div>
-                          <div class="el-table-wrap">
-                            <table class="el-table">
-                              <thead><tr><th>报表</th><th class="is-center">核心科目</th><th class="is-center">已映射字段</th><th class="fa-col-cov">覆盖率</th></tr></thead>
-                              <tbody>
-                                <tr><td>资产负债表</td><td class="is-center">24 / 25</td><td class="is-center">44</td><td><span class="el-progress is-success"><span style="width:96%">96%</span></span></td></tr>
-                                <tr><td>利润表</td><td class="is-center">15 / 16</td><td class="is-center">26</td><td><span class="el-progress is-success"><span style="width:94%">94%</span></span></td></tr>
-                                <tr><td>现金流量表</td><td class="is-center">10 / 10</td><td class="is-center">22</td><td><span class="el-progress is-success"><span style="width:100%">100%</span></span></td></tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="fa-unmapped-head">
-                            <h4>未映射科目（3）</h4>
-                            <div class="el-radio-group is-small" role="group" aria-label="按报表筛选" id="fa-unmapped-filter">
-                              <button type="button" data-kind="all" aria-pressed="true">全部 3</button>
-                              <button type="button" data-kind="资产负债表" aria-pressed="false">资产负债表 1</button>
-                              <button type="button" data-kind="利润表" aria-pressed="false">利润表 1</button>
-                              <button type="button" data-kind="现金流量表" aria-pressed="false">现金流量表 1</button>
-                            </div>
-                          </div>
-                          <p class="fa-sub-tip">未映射行不会写入标准科目；可核对金额是否已由其他科目覆盖，或入库后在报表页手工补录。</p>
-                          <div class="el-table-wrap">
-                            <table class="el-table">
-                              <thead><tr><th>报表</th><th>原文科目</th><th class="is-right">金额</th><th class="is-center">页</th><th>原因</th></tr></thead>
-                              <tbody id="fa-unmapped-body"></tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <div class="fa-actions">
-                          <button type="button" class="el-button" id="fa-save">保存修改</button>
-                          <button type="button" class="el-button is-primary" id="fa-commit">确认本份入库</button>
-                          <button type="button" class="el-button is-success is-plain" id="fa-goto-statements" hidden data-msg="示意原型只还原「比率分析」与「年报导入」两页">查看三大报表</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 其他菜单 -->
-                <div class="fa-page" data-view="other" hidden>
-                  <div class="el-empty">
-                    <svg viewBox="0 0 64 48" aria-hidden="true"><rect x="8" y="14" width="48" height="28" rx="3"/><path d="M8 24h14l4 6h12l4-6h14"/></svg>
-                    <p id="fa-other-text">示意原型只还原「比率分析」与「年报导入」两页</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="fa-loading" id="fa-loading" hidden><span class="fa-spinner" aria-hidden="true"></span><span id="fa-loading-text">加载中</span></div>
-              <div class="el-message" id="fa-message" role="status" aria-live="polite"></div>
-            </div>
-          </div>
+    <section class="section story">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">把财务口径落到产品规则</h2>
+          <p class="section-sub" style="margin-top:10px">把会计口径写成可执行的映射与计算规则，再按不同读者分层呈现。</p>
         </div>
       </div>
-      <p class="stage-note">示意原型：只还原界面与交互，不连接真实功能，数据为示例。<br>“示例公司A”及其中全部金额、比率、映射统计均为虚构示例，非任何真实公司财报；界面布局、文案与比率口径取自项目截图与源码。</p>
+      <ol class="story-list">
+        <li><span class="story-no">01</span><h3>问题</h3><p>上市公司年报里的三大报表散落在 PDF 的不同页码上，同一个科目在不同公司的叫法和披露口径也不完全一致。直接拿原文算比率，口径难统一；全部归并成标准科目，又不容易回到原文核对。</p></li>
+        <li><span class="story-no">02</span><h3>数据建模</h3><p>把年报原文披露数据与标准会计科目分两层存储，用页码和映射规则把来源与指标关联起来，既能统一口径，也能回到原文复核；在此基础上计算偿债、盈利、营运、现金流 4 类 13 项财务比率。</p></li>
+        <li><span class="story-no">03</span><h3>口径规则</h3><p>把归母与合并口径、缺失回退规则写进产品规则，例如 ROE 优先取归母净利润 / 归母所有者权益，缺省时回退为净利润 / 所有者权益合计；对缺失值和零分母保留原因，便于追溯。</p></li>
+        <li><span class="story-no">04</span><h3>导入与复核</h3><p>支持 PDF、Excel、巨潮资讯 3 种来源导入三大报表，为自动映射设置人工复核边界。用 10 家年报做初检，9 家达到自动导入条件、1 家转人工复核；据此发现续页定位缺陷并调整规则，调整后迈瑞医疗资产负债表映射 46 个字段。</p></li>
+        <li><span class="story-no">05</span><h3>分层呈现</h3><p>为管理层、投资人和专业人员设计 3 类视图；按报告期匹配去年同期，区分科目金额、同比与结构占比，结合趋势和变动排行定位财务变化。</p></li>
+        <li><span class="story-no">06</span><h3>协作开发</h3><p>由我定义需求、设计口径与流程，组织 AI Agent 协作实现前后端（FastAPI + SQLite，Vue3 + Element Plus + ECharts），并负责测试验收。</p></li>
+      </ol>
     </section>
 
-    <section class="section">
-      <p class="eyebrow">What I did</p>
-      <h2 class="section-title">我做了什么</h2>
-      <ul class="point-list">
-        <li><strong>数据建模：</strong>把年报原文披露数据与标准会计科目分两层存储，用页码和映射规则把来源与指标关联起来，既能统一口径，也能回到原文复核；在此基础上计算偿债、盈利、营运、现金流 4 类 13 项财务比率。</li>
-        <li><strong>口径落到规则：</strong>把归母与合并口径、缺失回退规则写进产品规则，例如 ROE 优先取归母净利润 / 归母所有者权益，缺省时回退为净利润 / 所有者权益合计；对缺失值和零分母保留原因，便于追溯。</li>
-        <li><strong>导入与复核：</strong>支持 PDF、Excel、巨潮资讯 3 种来源导入三大报表，为自动映射设置人工复核边界。用 10 家年报做初检，9 家达到自动导入条件、1 家转人工复核；据此发现续页定位缺陷并调整规则，调整后迈瑞医疗资产负债表映射 46 个字段。</li>
-        <li><strong>分层呈现：</strong>为管理层、投资人和专业人员设计 3 类视图；按报告期匹配去年同期，区分科目金额、同比与结构占比，结合趋势和变动排行定位财务变化。</li>
-        <li><strong>AI Agent 协作开发：</strong>由我定义需求、设计口径与流程，组织 AI Agent 协作实现前后端，并负责测试验收。</li>
-      </ul>
+    <section class="section" style="padding-top:0">
+      <div class="section-head"><h2 class="section-title">数据处理流程</h2></div>
+      <ol class="flow" aria-label="数据处理流程">
+        <li><small>01</small><strong>年报来源</strong><span>PDF · Excel · 巨潮资讯</span></li>
+        <li><small>02</small><strong>原文披露层</strong><span>保留原文科目、金额与页码</span></li>
+        <li class="is-accent"><small>03</small><strong>映射规则</strong><span>自动映射 + 人工复核边界</span></li>
+        <li><small>04</small><strong>标准科目层</strong><span>统一口径的三大报表</span></li>
+        <li><small>05</small><strong>比率与视图</strong><span>4 类 13 项比率 · 3 类视图</span></li>
+      </ol>
     </section>
 
-    <section class="section">
-      <p class="eyebrow">Numbers</p>
-      <h2 class="section-title">关键数据</h2>
-      <div class="stats">
+    <section class="section" style="padding-top:0">
+      <div class="section-head"><h2 class="section-title">关键数据</h2></div>
+      <div class="stats stats-5">
         <div class="stat"><div class="stat-value">3 种</div><div class="stat-label">导入来源：PDF、Excel、巨潮资讯</div></div>
         <div class="stat"><div class="stat-value">4 类 13 项</div><div class="stat-label">财务比率</div></div>
         <div class="stat"><div class="stat-value">9 / 10</div><div class="stat-label">家年报初检达到自动导入条件，1 家转人工复核</div></div>
@@ -367,8 +102,8 @@
     </section>
 
     <nav class="pager" aria-label="其他作品">
-      <a href="../visible-workflow/index.html"><small>上一个作品</small>Visible Workflow</a>
-      <a class="next" href="../cliworker-now/index.html"><small>下一个作品</small>CLI Worker Now</a>
+      <a href="../visible-workflow/index.html"><small>上一个作品</small>← Visible Workflow</a>
+      <a class="next" href="../cliworker-now/index.html"><small>下一个作品</small>CLI Worker Now →</a>
     </nav>
   </main>
 

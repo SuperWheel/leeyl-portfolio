@@ -1,4 +1,4 @@
-// 共用脚本：主题切换与淡入动画。项目原型交互写在各自目录的 prototype.js。
+// 共用脚本：主题切换、淡入动画、交互演示缩放。演示本身打包在各项目的 demo/ 目录。
 (function () {
   const root = document.documentElement;
   const KEY = 'leeyl-theme';
@@ -22,6 +22,16 @@
         try { localStorage.setItem(KEY, next); } catch (e) { /* 忽略 */ }
       });
     }
+
+    // 演示按 1280×820 渲染，整体缩放到容器宽度，保持与桌面端一致的布局
+    document.querySelectorAll('.demo-viewport').forEach(function (box) {
+      const frame = box.querySelector('iframe');
+      if (!frame) return;
+      const fit = function () { frame.style.transform = 'scale(' + box.clientWidth / 1280 + ')'; };
+      fit();
+      if ('ResizeObserver' in window) new ResizeObserver(fit).observe(box);
+      else window.addEventListener('resize', fit);
+    });
 
     const items = document.querySelectorAll('.reveal');
     if (!('IntersectionObserver' in window)) {

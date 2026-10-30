@@ -4,136 +4,102 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Visible Workflow · 李依伦作品集</title>
-  <meta name="description" content="DeepSeek Harness 可视化工作流插件：让 Agent 先真实试做、跑通后再拆成流程，用户在画布上查看、批注并审核修改。">
+  <meta name="description" content="DeepSeek Harness 可视化工作流插件：Agent 先真实试做，跑通后再拆成画布上的流程，用户看清每一步、确认修改后才写入。">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../../assets/css/site.css">
-  <link rel="stylesheet" href="prototype.css">
   <script src="../../assets/js/site.js" defer></script>
-  <script src="prototype.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="../../index.html">李依伦</a>
-      <nav class="nav">
-        <a href="../../index.html#works">作品</a>
-        <a href="../../index.html#about" class="nav-text">关于我</a>
-        <a href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub</a>
+    <div class="wrap-wide bar">
+      <a class="brand" href="../../index.html"><span class="brand-mark" aria-hidden="true">李</span>李依伦</a>
+      <nav class="nav" aria-label="作品">
+        <a href="../cliworker-now/index.html" class="nav-hide">CLI Worker Now</a>
+        <a href="index.html" aria-current="page">Visible Workflow</a>
+        <a href="../financial-analysis/index.html" class="nav-hide">财务分析系统</a>
         <button class="theme-toggle" type="button" aria-label="切换深浅色">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         </button>
       </nav>
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="wrap-wide">
     <section class="project-hero">
-      <p class="breadcrumb"><a href="../../index.html#works">作品</a> / Visible Workflow</p>
-      <p class="eyebrow">开源插件 · 2026.10 至今</p>
-      <h1>Visible Workflow</h1>
-      <p class="lead">DeepSeek Harness 的可视化工作流插件。Agent 先把任务真实做一遍，跑通后再拆成画布上的流程；用户能看清每一步、在节点上批注要改的地方，确认修改后才写入，做过的方法可以保存下来反复使用。</p>
+      <div>
+        <p class="kicker">02 · 开源插件 · 2026.10 至今</p>
+        <h1>Visible Workflow</h1>
+        <p class="lead">DeepSeek Harness 的可视化工作流插件。Agent 先把任务真实做一遍，跑通后再拆成画布上的流程；用户能看清每一步、在节点上批注要改的地方，确认修改后才写入，做过的方法可以保存下来反复使用。</p>
+      </div>
       <div class="btn-row">
-        <a class="btn btn-primary" href="https://github.com/SuperWheel/dsh-visible-workflows" target="_blank" rel="noopener">项目主页（GitHub）</a>
-        <a class="btn" href="#prototype">看交互原型</a>
+        <a class="btn btn-primary" href="#demo">试用交互原型</a>
+        <a class="btn" href="https://github.com/SuperWheel/dsh-visible-workflows" target="_blank" rel="noopener">项目主页（GitHub）</a>
       </div>
-      <dl class="meta-list">
-        <div><dt>时间</dt><dd>2026.10 至今</dd></div>
-        <div><dt>我的角色</dt><dd>产品思路、需求定义、PRD、方案选择、组织 AI Agent 协作开发与验收</dd></div>
-        <div><dt>技术与平台</dt><dd>DeepSeek Harness 插件 · 基于 Graphon 执行 · 与 AI Agent 协作开发</dd></div>
-        <div><dt>当前状态</dt><dd>持续迭代中</dd></div>
-      </dl>
+    </section>
+
+    <dl class="facts">
+      <div><dt>我的角色</dt><dd>产品思路、需求定义、PRD、方案选择、组织 AI Agent 协作开发与验收</dd></div>
+      <div><dt>技术与平台</dt><dd>DSH 插件 · 基于 Graphon 执行</dd></div>
+      <div><dt>需求文档</dt><dd>2 版 PRD，36 项验收编号</dd></div>
+      <div><dt>当前状态</dt><dd>持续迭代中</dd></div>
+    </dl>
+
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="demo-head">
+        <div>
+          <strong id="demo-title">交互原型</strong>
+          <p>用插件真实的前端界面搭建，流程与运行结果为本地示例，不连接 Agent。</p>
+        </div>
+        <a class="btn" href="demo/index.html" target="_blank" rel="noopener">在新窗口打开</a>
+      </div>
+      <div class="demo-viewport">
+        <iframe src="demo/index.html" title="Visible Workflow 交互原型" loading="lazy"></iframe>
+      </div>
+      <ol class="demo-tries">
+        <li><strong>看节点配置：</strong>点画布上的节点，右侧打开它的配置：输入字段、代码、工具或人工介入。</li>
+        <li><strong>添加节点：</strong>点左侧工具栏的“+”，从基础、逻辑、转换、工具几类节点里挑选。</li>
+        <li><strong>运行流程：</strong>点右上角“执行”，看节点依次运行，再打开“运行记录”查看每一步的输入输出。</li>
+        <li><strong>返回列表：</strong>点左上角返回，看工作流主页、模板和每张卡片的“更多”菜单。</li>
+      </ol>
     </section>
 
     <section class="section">
-      <p class="eyebrow">Overview</p>
-      <h2 class="section-title">项目简介</h2>
-      <div class="prose">
-        <p>Agent 能连续完成复杂任务，但过程一长，用户就很难看清它做到了哪一步、哪一步依赖哪一步。想把做法保留下来，又要面对手动画流程的成本；用自然语言改长流程时，常常定位不准、改动范围过大。</p>
-        <p>Visible Workflow 把“做事”和“建流程”的顺序反过来：先让 Agent 真实试做，跑通后由试做记录自动生成流程骨架与草稿；之后每次修改都先变成一份待接受的提案，用户看过影响范围再决定接受或退回。</p>
-      </div>
-      <div class="grid grid-2 vw-problems">
-        <div class="card">
-          <p class="vw-problem-no">问题 1</p>
-          <strong>看不清过程</strong>
-          <p class="muted">Agent 连续完成复杂任务时，用户难以判断当前步骤与依赖，不知道该从哪里调整。</p>
-        </div>
-        <div class="card">
-          <p class="vw-problem-no">问题 2</p>
-          <strong>手动画流程成本高</strong>
-          <p class="muted">从零拖节点、填配置，搭一条能用的流程要花不少时间。</p>
-        </div>
-        <div class="card">
-          <p class="vw-problem-no">问题 3</p>
-          <strong>改长流程容易改偏</strong>
-          <p class="muted">用自然语言描述修改，定位不准，改动范围容易超出预期。</p>
-        </div>
-        <div class="card">
-          <p class="vw-problem-no">问题 4</p>
-          <strong>做法留不下来</strong>
-          <p class="muted">一次任务的执行方法难以保留，下次同类任务还要重新摸索。</p>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">要解决的四个问题</h2>
+          <p class="section-sub" style="margin-top:10px">Agent 能连续完成复杂任务，但过程一长，用户就很难看清、留住和改准它的做法。</p>
         </div>
       </div>
-      <p class="muted vw-source">问题来源：PRD v0.4 设计讨论稿。</p>
+      <div class="card-grid">
+        <div class="card"><small>问题 1</small><strong>看不清过程</strong><p>Agent 连续完成复杂任务时，用户难以判断当前步骤与依赖，不知道该从哪里调整。</p></div>
+        <div class="card"><small>问题 2</small><strong>手动画流程成本高</strong><p>从零拖节点、填配置，搭一条能用的流程要花不少时间。</p></div>
+        <div class="card"><small>问题 3</small><strong>改长流程容易改偏</strong><p>用自然语言描述修改，定位不准，改动范围容易超出预期。</p></div>
+        <div class="card"><small>问题 4</small><strong>做法留不下来</strong><p>一次任务的执行方法难以保留，下次同类任务还要重新摸索。</p></div>
+      </div>
+      <p class="source-note">问题来源：PRD v0.4 设计讨论稿。</p>
     </section>
 
-    <section class="section" id="prototype">
-      <p class="eyebrow">Prototype</p>
-      <h2 class="section-title">交互原型</h2>
-      <p class="prose vw-guide">还原插件的全屏画布页。点击节点在右侧查看配置；左侧「+」打开节点面板添加节点；选中节点后可「添加注释」；点「查看修改」审阅 Agent 提交的修改提案；点「执行」看节点依次运行。想从头看流程怎么来的，可以点「让 Agent 试做」。</p>
-      <div class="vw-demo-bar" role="group" aria-label="演示入口">
-        <span class="vw-demo-label">演示入口</span>
-        <button type="button" class="btn btn-primary vw-demo-btn" id="vw-demo-trial">让 Agent 试做</button>
-        <button type="button" class="btn vw-demo-btn" id="vw-demo-reset">恢复示例流程</button>
-      </div>
-      <div class="stage vw-stage">
-        <div class="mock-window vw-window" role="region" aria-label="插件界面示意：工作流画布">
-          <div class="mock-titlebar vw-titlebar"><i></i><i></i><i></i><span class="vw-tab">工作流</span></div>
-          <div class="vw-app" id="vw-app">
-            <div class="vw-viewport" id="vw-viewport" role="group" aria-label="工作流画布">
-              <div class="vw-world" id="vw-world">
-                <svg class="vw-edges" id="vw-edges" aria-hidden="true"></svg>
-                <div class="vw-stickies" id="vw-stickies"></div>
-                <div class="vw-nodes" id="vw-nodes"></div>
-              </div>
-            </div>
-            <div class="vw-float" id="vw-float" hidden></div>
-            <div class="vw-chrome vw-top-left" id="vw-top-left"></div>
-            <div class="vw-chrome vw-top-right" id="vw-top-right"></div>
-            <nav class="vw-chrome vw-toolbar" id="vw-toolbar" aria-label="画布工具栏"></nav>
-            <section class="vw-picker" id="vw-picker" aria-label="添加节点面板" hidden></section>
-            <div class="vw-side" id="vw-side">
-              <section class="vw-notice" id="vw-notice" hidden></section>
-              <section class="vw-config" id="vw-config" aria-label="节点配置" hidden></section>
-            </div>
-            <div class="vw-chrome vw-bottom-left" id="vw-bottom-left"></div>
-            <div class="vw-bottom-right" id="vw-bottom-right"></div>
-            <div class="vw-pop" id="vw-note-pop" role="dialog" aria-labelledby="vw-note-title" hidden></div>
-            <div class="vw-pop vw-runs" id="vw-runs" role="dialog" aria-label="运行记录" hidden></div>
-            <div class="vw-modal-backdrop" id="vw-modal" hidden></div>
-            <div class="vw-toast" id="vw-toast" role="status" aria-live="polite"></div>
-          </div>
+    <section class="section story" style="padding-top:0">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">我做了什么</h2>
+          <p class="section-sub" style="margin-top:10px">从四个问题出发，用两版 PRD 定方案，再按验收编号组织 AI Agent 协作开发。</p>
         </div>
       </div>
-      <p class="stage-note">示意原型：只还原界面与交互，不连接真实功能。</p>
+      <ol class="story-list">
+        <li><span class="story-no">01</span><h3>需求定义</h3><p>梳理 Agent 长任务里“看不清、画不动、改不准、留不下”四个问题，提出产品思路，并把它定位为运行在 DeepSeek Harness 中、基于 Graphon 执行的插件。</p></li>
+        <li><span class="story-no">02</span><h3>需求文档</h3><p>与 AI Agent 协作撰写 2 版 PRD：v0.4 设计讨论稿（2026-10-14）提出问题与交互设想；v2.0 需求整合稿（2026-10-16）结合三方竞品横向对比确定方案，按 P0—P2 分期规划交付，设 36 项验收编号（AC-01～AC-36）。</p></li>
+        <li><span class="story-no">03</span><h3>先试后建</h3><p>让 Agent 先真实试做、跑通后再拆成流程，由试做记录自动生成流程骨架与草稿，避免先凭空设计一张跑不通的图。</p></li>
+        <li><span class="story-no">04</span><h3>标准模板</h3><p>把节点配置固化为模板，AI 只填业务字段，由后端校验。受控对照中两组各 40 次均成功，模型请求 80→40，修复次数 14→0，Token 约降 52%；对照组是项目内另一方案，耗时未稳定达标，未计入上述结果。</p></li>
+        <li><span class="story-no">05</span><h3>变更审核</h3><p>修改流程先生成待接受的提案，校验版本与固定节点；审核先于写入，退回时目标文件不变。</p></li>
+        <li><span class="story-no">06</span><h3>方案选择</h3><p>由 AI 调研 7 个工作流平台后，我选定可组合模块方案，并沉淀了片段模块。</p></li>
+        <li><span class="story-no">07</span><h3>验收管理</h3><p>拆分任务交给 AI Agent 实现，按验收编号逐项对照，自动测试与真实宿主验收分开记录，未达标项继续跟踪。</p></li>
+      </ol>
     </section>
 
-    <section class="section">
-      <p class="eyebrow">What I did</p>
-      <h2 class="section-title">我做了什么</h2>
-      <ul class="point-list">
-        <li><strong>从问题出发定义需求：</strong>梳理 Agent 长任务里“看不清、画不动、改不准、留不下”四个问题，提出产品思路，并把它定位为运行在 DeepSeek Harness 中、基于 Graphon 执行的插件。</li>
-        <li><strong>与 AI Agent 协作撰写 2 版 PRD：</strong>v0.4 设计讨论稿（2026-10-14）提出问题与交互设想；v2.0 需求整合稿（2026-10-16）结合三方竞品横向对比确定方案，按 P0—P2 分期规划交付，设 36 项验收编号（AC-01～AC-36）。</li>
-        <li><strong>提出“先试后建”：</strong>让 Agent 先真实试做、跑通后再拆成流程，由试做记录自动生成流程骨架与草稿，避免先凭空设计一张跑不通的图。</li>
-        <li><strong>用标准模板降低出错：</strong>把节点配置固化为模板，AI 只填业务字段，由后端校验。受控对照中两组各 40 次均成功，模型请求 80→40，修复次数 14→0，Token 约降 52%；对照组是项目内另一方案，耗时未稳定达标，未计入上述结果。</li>
-        <li><strong>设计变更审核：</strong>修改流程先生成待接受的提案，校验版本与固定节点；审核先于写入，退回时目标文件不变。</li>
-        <li><strong>选定可组合模块方案：</strong>由 AI 调研 7 个工作流平台后，我选定可组合模块方案，并沉淀了片段模块。</li>
-        <li><strong>组织协作开发与验收：</strong>拆分任务交给 AI Agent 实现，按验收编号逐项对照，自动测试与真实宿主验收分开记录，未达标项继续跟踪。</li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <p class="eyebrow">Numbers</p>
-      <h2 class="section-title">关键数据</h2>
-      <div class="stats">
+    <section class="section" style="padding-top:0">
+      <div class="section-head"><h2 class="section-title">关键数据</h2></div>
+      <div class="stats stats-3">
         <div class="stat"><div class="stat-value">2 版</div><div class="stat-label">PRD：v0.4 讨论稿、v2.0 整合稿</div></div>
         <div class="stat"><div class="stat-value">36 项</div><div class="stat-label">验收编号 AC-01～AC-36</div></div>
         <div class="stat"><div class="stat-value">80→40</div><div class="stat-label">模型请求次数（受控对照）</div></div>
@@ -141,12 +107,12 @@
         <div class="stat"><div class="stat-value">约 52%</div><div class="stat-label">Token 降幅（受控对照）</div></div>
         <div class="stat"><div class="stat-value">7 个</div><div class="stat-label">调研的工作流平台（AI 执行调研）</div></div>
       </div>
-      <p class="muted vw-source">受控对照：两组各 40 次均成功，对照组为项目内另一方案；耗时未稳定达标，未计入上述数据。</p>
+      <p class="source-note">受控对照：两组各 40 次均成功，对照组为项目内另一方案；耗时未稳定达标，未计入上述数据。</p>
     </section>
 
     <nav class="pager" aria-label="其他作品">
-      <a href="../cliworker-now/index.html"><small>上一个作品</small>CLI Worker Now</a>
-      <a class="next" href="../financial-analysis/index.html"><small>下一个作品</small>财务分析系统</a>
+      <a href="../cliworker-now/index.html"><small>上一个作品</small>← CLI Worker Now</a>
+      <a class="next" href="../financial-analysis/index.html"><small>下一个作品</small>财务分析系统 →</a>
     </nav>
   </main>
 

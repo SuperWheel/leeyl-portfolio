@@ -1,0 +1,4 @@
+html,body,#root{height:100%;margin:0}
+body{font-family:var(--dsw-font-family);font-size:14px;color:var(--dsw-alias-label-primary,#171719);background:var(--dsw-alias-bg-base,#fff);overflow:hidden}
+*{box-sizing:border-box}
+.vw-demo-pane{height:100%;min-width:0;min-height:0}

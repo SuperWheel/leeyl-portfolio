@@ -4,131 +4,131 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>李依伦 · 作品集</title>
-  <meta name="description" content="李依伦的产品作品集：CLI Worker Now、Visible Workflow 与财务分析系统。">
+  <meta name="description" content="李依伦的产品作品集：CLI Worker Now、Visible Workflow 与财务分析系统，每个作品附可直接操作的交互原型。">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
   <script src="assets/js/site.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html">李依伦</a>
-      <nav class="nav">
+    <div class="wrap bar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">李</span>李依伦</a>
+      <nav class="nav" aria-label="主导航">
         <a href="#works">作品</a>
-        <a href="#about" class="nav-text">关于我</a>
-        <a href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub</a>
+        <a href="#method" class="nav-hide">做法</a>
+        <a href="#about" class="nav-hide">关于</a>
+        <a href="mailto:liyilun200212@163.com" class="nav-cta">联系我</a>
         <button class="theme-toggle" type="button" aria-label="切换深浅色">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         </button>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="wrap">
-        <p class="eyebrow">Product Portfolio</p>
+    <section class="wrap hero">
+      <div class="hero-main">
+        <p class="status-pill"><i aria-hidden="true"></i>正在寻找产品经理实习</p>
         <h1>把模糊的需求，<br>做成能用、能验收的产品。</h1>
-        <p class="lead">我是李依伦，东北大学会计学硕士在读，正在寻找产品经理实习。我与 AI Agent 协作，主导了两款开源插件和一套财务分析系统：从发现问题、写 PRD、做 MVP，到迭代发布、处理用户反馈。</p>
-        <div class="profile-facts">
-          <span>东北大学 · 会计学硕士（2026.09–2028.06）</span>
-          <span>产品设计 · 数据分析 · AI Agent 协作</span>
-        </div>
+        <p class="lead">我是李依伦，东北大学会计学硕士在读。与 AI Agent 协作，主导了两款开源插件和一套财务分析系统：从发现问题、写 PRD、做 MVP，到迭代发布、处理用户反馈。</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="#works">看作品</a>
-          <a class="btn" href="mailto:liyilun200212@163.com">联系我</a>
+          <a class="btn btn-primary" href="#works">试用三个作品的交互原型
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn" href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub 主页</a>
         </div>
+      </div>
+      <div class="hero-stats" aria-label="CLI Worker Now 关键数据">
+        <div><b>29</b><span>GitHub stars</span></div>
+        <div><b>2,300+</b><span>插件下载</span></div>
+        <div><b>10</b><span>4 周内发布版本</span></div>
+        <div><b>7/7</b><span>外部 Issue 已关闭</span></div>
+        <p>数据来自 CLI Worker Now，统计至 2026.10.30</p>
       </div>
     </section>
 
-    <section class="section" id="works">
-      <div class="wrap">
-        <p class="eyebrow">Selected Works</p>
+    <section class="wrap" id="works">
+      <div class="section-head">
         <h2 class="section-title">三个作品</h2>
-        <div class="grid grid-3">
-          <a class="card work-card reveal" href="projects/cliworker-now/index.html">
-            <div class="work-cover" aria-hidden="true">
-              <svg viewBox="0 0 320 200">
-                <rect x="24" y="22" width="272" height="156" rx="10" fill="var(--surface)" stroke="var(--line)"/>
-                <rect x="24" y="22" width="78" height="156" rx="10" fill="var(--surface-2)"/>
-                <g fill="var(--accent)"><circle cx="44" cy="52" r="7"/><circle cx="44" cy="82" r="7" opacity=".6"/><circle cx="44" cy="112" r="7" opacity=".35"/></g>
-                <g fill="var(--text-3)" opacity=".5"><rect x="58" y="48" width="34" height="7" rx="3"/><rect x="58" y="78" width="28" height="7" rx="3"/><rect x="58" y="108" width="30" height="7" rx="3"/></g>
-                <rect x="118" y="44" width="150" height="22" rx="11" fill="var(--accent-soft)"/>
-                <rect x="140" y="78" width="138" height="22" rx="11" fill="var(--surface-2)"/>
-                <rect x="118" y="112" width="120" height="22" rx="11" fill="var(--accent-soft)"/>
-                <rect x="118" y="148" width="160" height="16" rx="8" fill="none" stroke="var(--line)"/>
-              </svg>
+        <p class="section-sub">每个作品页都嵌入了按真实界面还原、可以直接操作的原型</p>
+      </div>
+      <div class="cases">
+        <a class="case reveal" href="projects/cliworker-now/index.html">
+          <div class="case-body">
+            <p class="kicker">01 · 开源插件 · 2026.10 至今</p>
+            <h3>CLI Worker Now</h3>
+            <p>DeepSeek Harness 多智能体协作插件。在主对话里派遣 Codex、Claude Code 等 13 种 AI CLI 分工协作，过程在侧栏统一查看，点名就能续聊。</p>
+            <div class="case-metrics">
+              <div><b>2,300+</b><span>下载</span></div>
+              <div><b>10 个</b><span>正式版本</span></div>
+              <div><b>约 1 天</b><span>Issue 中位处理</span></div>
             </div>
-            <div class="work-body">
-              <p class="work-meta">开源插件 · 2026.10 至今</p>
-              <h3>CLI Worker Now</h3>
-              <p>DeepSeek Harness 多智能体协作插件，在主对话里派遣 Codex、Claude Code 等 13 种 AI CLI 分工协作。</p>
-              <div class="tags"><span class="tag">29 stars</span><span class="tag">下载 2,300+</span><span class="tag">10 个版本</span></div>
-              <span class="work-more">查看原型与介绍 →</span>
-            </div>
-          </a>
+            <p class="case-role">我负责：问题定义 · 与 AI Agent 协作撰写 PRD · 方案迭代 · 版本排期</p>
+            <span class="case-more">打开交互原型 →</span>
+          </div>
+          <div class="case-media"><img src="assets/img/cover-cliworker-now.jpg" alt="CLI Worker Now 在 DeepSeek Harness 中的界面：左侧会话、中间主对话、右侧 Worker 列表" width="1920" height="1230" loading="lazy"></div>
+        </a>
 
-          <a class="card work-card reveal" href="projects/visible-workflow/index.html">
-            <div class="work-cover" aria-hidden="true">
-              <svg viewBox="0 0 320 200">
-                <g stroke="var(--text-3)" stroke-width="2" fill="none" opacity=".6"><path d="M96 70 C130 70 130 100 160 100"/><path d="M96 130 C130 130 130 100 160 100"/><path d="M224 100 L250 100"/></g>
-                <rect x="36" y="54" width="60" height="32" rx="8" fill="var(--surface)" stroke="var(--line)"/>
-                <rect x="36" y="114" width="60" height="32" rx="8" fill="var(--surface)" stroke="var(--line)"/>
-                <rect x="160" y="82" width="64" height="36" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
-                <rect x="250" y="84" width="40" height="32" rx="8" fill="var(--surface)" stroke="var(--line)"/>
-                <circle cx="192" cy="100" r="5" fill="var(--accent)"/>
-              </svg>
+        <a class="case reveal" href="projects/visible-workflow/index.html">
+          <div class="case-body">
+            <p class="kicker">02 · 开源插件 · 2026.10 至今</p>
+            <h3>Visible Workflow</h3>
+            <p>让 Agent 先真实试做，跑通后再拆成可视化工作流。用户在画布上查看节点、改配置、看每一步的运行输入输出，再把流程复用起来。</p>
+            <div class="case-metrics">
+              <div><b>2 版</b><span>PRD（v0.4、v2）</span></div>
+              <div><b>36 项</b><span>验收编号</span></div>
+              <div><b>约 52%</b><span>Token 下降</span></div>
             </div>
-            <div class="work-body">
-              <p class="work-meta">开源插件 · 2026.10 至今</p>
-              <h3>Visible Workflow</h3>
-              <p>让 Agent 先真实试做、跑通后再拆成可视化工作流，用户能在画布上查看、批注和复用流程。</p>
-              <div class="tags"><span class="tag">2 版 PRD</span><span class="tag">36 项验收编号</span><span class="tag">Token 降约 52%</span></div>
-              <span class="work-more">查看原型与介绍 →</span>
-            </div>
-          </a>
+            <p class="case-role">我负责：竞品对比 · 与 AI Agent 协作撰写 PRD · P0—P2 分期 · 验收管理</p>
+            <span class="case-more">打开交互原型 →</span>
+          </div>
+          <div class="case-media"><img src="assets/img/cover-visible-workflow.jpg" alt="Visible Workflow 的工作流画布：节点、连线与缩略图" width="1920" height="1230" loading="lazy"></div>
+        </a>
 
-          <a class="card work-card reveal" href="projects/financial-analysis/index.html">
-            <div class="work-cover" aria-hidden="true">
-              <svg viewBox="0 0 320 200">
-                <rect x="28" y="28" width="264" height="144" rx="10" fill="var(--surface)" stroke="var(--line)"/>
-                <g fill="var(--accent)"><rect x="52" y="112" width="20" height="40" rx="3" opacity=".45"/><rect x="82" y="92" width="20" height="60" rx="3" opacity=".65"/><rect x="112" y="72" width="20" height="80" rx="3"/></g>
-                <path d="M160 132 L190 104 L220 116 L262 66" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round"/>
-                <g fill="var(--text-3)" opacity=".45"><rect x="52" y="46" width="80" height="8" rx="4"/><rect x="160" y="46" width="60" height="8" rx="4"/></g>
-              </svg>
+        <a class="case reveal" href="projects/financial-analysis/index.html">
+          <div class="case-body">
+            <p class="kicker">03 · 个人项目 · 2026.03–2026.07</p>
+            <h3>财务分析系统</h3>
+            <p>导入上市公司年报，自动映射到标准会计科目并计算财务比率，为管理层、投资人和专业人员提供不同视图。</p>
+            <div class="case-metrics">
+              <div><b>3 种</b><span>导入来源</span></div>
+              <div><b>13 项</b><span>4 类财务比率</span></div>
+              <div><b>3 类</b><span>角色视图</span></div>
             </div>
-            <div class="work-body">
-              <p class="work-meta">个人项目 · 2026.03–2026.07</p>
-              <h3>财务分析系统</h3>
-              <p>导入上市公司年报，自动映射到标准会计科目并计算财务比率，为管理层、投资人和专业人员提供不同视图。</p>
-              <div class="tags"><span class="tag">3 种导入来源</span><span class="tag">4 类 13 项比率</span><span class="tag">3 类视图</span></div>
-              <span class="work-more">查看原型与介绍 →</span>
-            </div>
-          </a>
-        </div>
+            <p class="case-role">我负责：需求定义 · 口径与映射规则 · 分角色视图设计 · 测试验收</p>
+            <span class="case-more">打开交互原型 →</span>
+          </div>
+          <div class="case-media"><img src="assets/img/cover-financial-analysis.jpg" alt="财务分析系统的比率分析页：指标卡、趋势图与变动排行" width="1920" height="1230" loading="lazy"></div>
+        </a>
       </div>
     </section>
 
-    <section class="section" id="about">
-      <div class="wrap grid grid-2">
+    <section class="wrap section" id="method">
+      <div class="section-head">
         <div>
-          <p class="eyebrow">About</p>
-          <h2 class="section-title">我怎么做产品</h2>
-          <ul class="point-list">
-            <li><strong>从自己的真实痛点出发。</strong>CLI Worker Now 起源于我同时调用多个 AI CLI 时对话分散、进展难追踪。</li>
-            <li><strong>先跑通，再定方案。</strong>先用 MVP 验证，再根据实际问题调整方案，比如把自绘对话改为桥接原生会话。</li>
-            <li><strong>需求写清楚，验收说得出。</strong>与 AI Agent 协作撰写 PRD，按编号逐项对照实现，自动测试与真实环境验收分开记录。</li>
-            <li><strong>把用户反馈闭环。</strong>开源后 7 个外部 Issue 全部关闭，中位处理时间约 1 天。</li>
-          </ul>
+          <h2 class="section-title">我怎么把一个产品做完</h2>
+          <p class="section-sub" style="margin-top:10px">以 CLI Worker Now 为例，从自己的痛点走到外部用户反馈闭环。</p>
         </div>
-        <div>
-          <p class="eyebrow">Skills</p>
-          <h2 class="section-title">技能</h2>
-          <div class="grid" style="gap:14px">
-            <div class="card"><strong>产品方法</strong><p class="muted" style="margin-top:6px">需求调研与拆解、PRD 撰写、流程与规则设计、竞品分析、迭代验收；会使用 Figma 绘制原型</p></div>
-            <div class="card"><strong>数据分析</strong><p class="muted" style="margin-top:6px">SQL、Tableau、Excel 数据透视表、VBA、R 数据清洗与可视化</p></div>
-            <div class="card"><strong>AI Agent 协作</strong><p class="muted" style="margin-top:6px">用 Codex、Claude Code 拆解需求与协作开发，组织多 Agent 并行实施、交叉审查</p></div>
-          </div>
-        </div>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><small>01 发现问题</small><strong>多个 CLI 对话分散</strong><p>同时调用多个 AI CLI 时，谁在做什么、做到哪一步很难追踪；动手前先调研 herdr 等同类产品。</p></div>
+        <div class="step reveal"><small>02 写清需求</small><strong>与 AI Agent 协作撰写 PRD</strong><p>把用户问题、功能范围、权限规则和验收标准写进 PRD，再按优先级排期。</p></div>
+        <div class="step reveal"><small>03 验证方案</small><strong>先跑通 MVP 再定型</strong><p>MVP 暴露体验问题后，把自绘对话页改为桥接 Harness 原生会话。</p></div>
+        <div class="step reveal"><small>04 迭代发布</small><strong>4 周发布 10 个版本</strong><p>按自身需求与外部 Issue 排期，自动测试与真实环境验收分开记录。</p></div>
+        <div class="step reveal"><small>05 反馈闭环</small><strong>7 个外部 Issue 全部关闭</strong><p>从提出到关闭中位约 1 天；发布 5 篇介绍与教程，建立用户交流群。</p></div>
+      </div>
+    </section>
+
+    <section class="wrap about" id="about">
+      <div class="about-card">
+        <h2>关于我</h2>
+        <p>东北大学会计学硕士在读（2026.09–2028.06）。财务背景让我习惯先把口径和规则说清楚，再谈界面与功能。</p>
+        <a href="mailto:liyilun200212@163.com">liyilun200212@163.com →</a>
+      </div>
+      <div class="skills">
+        <div class="skill"><strong>产品方法</strong><p>需求调研与拆解、PRD 撰写、流程与规则设计、竞品分析、迭代验收；会使用 Figma 绘制原型</p></div>
+        <div class="skill"><strong>数据分析</strong><p>SQL、Tableau、Excel 数据透视表、VBA、R 数据清洗与可视化</p></div>
+        <div class="skill"><strong>AI Agent 协作</strong><p>用 Codex、Claude Code 拆解需求与协作开发，组织多 Agent 并行实施、交叉审查</p></div>
       </div>
     </section>
   </main>

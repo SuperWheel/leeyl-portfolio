@@ -1,0 +1,36 @@
+{
+  "name": "financial-analysis-demo-build",
+  "private": true,
+  "type": "module",
+  "description": "把 Web_Financial_Analyse 的真实 Vue 前端打包为浏览器内 mock 的静态演示（输出到 projects/financial-analysis/demo/）",
+  "scripts": {
+    "build": "vite build && node scripts/gen-licenses.mjs",
+    "dev": "vite",
+    "licenses": "node scripts/gen-licenses.mjs",
+    "verify": "node scripts/verify.mjs",
+    "extract-meta": "python3 -I scripts/extract_backend_meta.py"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.3.2",
+    "axios": "1.18.0",
+    "echarts": "5.6.0",
+    "element-plus": "2.14.2",
+    "pinia": "2.3.1",
+    "vue": "3.5.38",
+    "vue-echarts": "6.7.3",
+    "vue-router": "4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.2.4",
+    "puppeteer-core": "^24.10.0",
+    "typescript": "5.4.5",
+    "vite": "5.4.21"
+  },
+  "overrides": {
+    "@ctrl/tinycolor": "4.2.0",
+    "@floating-ui/core": "1.7.5",
+    "@floating-ui/dom": "1.7.6",
+    "@floating-ui/utils": "0.2.11",
+    "dayjs": "1.11.21"
+  }
+}

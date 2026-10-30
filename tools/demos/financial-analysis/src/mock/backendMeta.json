@@ -1,0 +1,552 @@
+{
+ "COA_VERSION": "cas-simplified-v2",
+ "BALANCE_SHEET_GROUPS": [
+  {
+   "key": "current_assets",
+   "label": "流动资产",
+   "fields": [
+    {
+     "key": "monetary_funds",
+     "label": "货币资金"
+    },
+    {
+     "key": "trading_financial_assets",
+     "label": "交易性金融资产"
+    },
+    {
+     "key": "notes_receivable",
+     "label": "应收票据"
+    },
+    {
+     "key": "accounts_receivable",
+     "label": "应收账款"
+    },
+    {
+     "key": "prepayments",
+     "label": "预付款项"
+    },
+    {
+     "key": "other_receivables",
+     "label": "其他应收款"
+    },
+    {
+     "key": "inventories",
+     "label": "存货"
+    },
+    {
+     "key": "other_current_assets",
+     "label": "其他流动资产"
+    },
+    {
+     "key": "total_current_assets",
+     "label": "流动资产合计"
+    }
+   ]
+  },
+  {
+   "key": "non_current_assets",
+   "label": "非流动资产",
+   "fields": [
+    {
+     "key": "long_term_equity_investments",
+     "label": "长期股权投资"
+    },
+    {
+     "key": "other_equity_instruments_investment",
+     "label": "其他权益工具投资"
+    },
+    {
+     "key": "other_non_current_financial_assets",
+     "label": "其他非流动金融资产"
+    },
+    {
+     "key": "investment_property",
+     "label": "投资性房地产"
+    },
+    {
+     "key": "fixed_assets",
+     "label": "固定资产"
+    },
+    {
+     "key": "construction_in_progress",
+     "label": "在建工程"
+    },
+    {
+     "key": "right_of_use_assets",
+     "label": "使用权资产"
+    },
+    {
+     "key": "intangible_assets",
+     "label": "无形资产"
+    },
+    {
+     "key": "goodwill",
+     "label": "商誉"
+    },
+    {
+     "key": "deferred_tax_assets",
+     "label": "递延所得税资产"
+    },
+    {
+     "key": "other_non_current_assets",
+     "label": "其他非流动资产"
+    },
+    {
+     "key": "total_non_current_assets",
+     "label": "非流动资产合计"
+    },
+    {
+     "key": "total_assets",
+     "label": "资产总计"
+    }
+   ]
+  },
+  {
+   "key": "current_liabilities",
+   "label": "流动负债",
+   "fields": [
+    {
+     "key": "short_term_borrowings",
+     "label": "短期借款"
+    },
+    {
+     "key": "notes_payable",
+     "label": "应付票据"
+    },
+    {
+     "key": "accounts_payable",
+     "label": "应付账款"
+    },
+    {
+     "key": "contract_liabilities",
+     "label": "合同负债"
+    },
+    {
+     "key": "employee_benefits_payable",
+     "label": "应付职工薪酬"
+    },
+    {
+     "key": "taxes_payable",
+     "label": "应交税费"
+    },
+    {
+     "key": "other_payables",
+     "label": "其他应付款"
+    },
+    {
+     "key": "non_current_liab_due_one_year",
+     "label": "一年内到期的非流动负债"
+    },
+    {
+     "key": "other_current_liabilities",
+     "label": "其他流动负债"
+    },
+    {
+     "key": "total_current_liabilities",
+     "label": "流动负债合计"
+    }
+   ]
+  },
+  {
+   "key": "non_current_liabilities",
+   "label": "非流动负债",
+   "fields": [
+    {
+     "key": "long_term_borrowings",
+     "label": "长期借款"
+    },
+    {
+     "key": "bonds_payable",
+     "label": "应付债券"
+    },
+    {
+     "key": "lease_liabilities",
+     "label": "租赁负债"
+    },
+    {
+     "key": "deferred_income",
+     "label": "递延收益"
+    },
+    {
+     "key": "deferred_tax_liabilities",
+     "label": "递延所得税负债"
+    },
+    {
+     "key": "other_non_current_liabilities",
+     "label": "其他非流动负债"
+    },
+    {
+     "key": "total_non_current_liabilities",
+     "label": "非流动负债合计"
+    },
+    {
+     "key": "total_liabilities",
+     "label": "负债合计"
+    }
+   ]
+  },
+  {
+   "key": "equity",
+   "label": "所有者权益",
+   "fields": [
+    {
+     "key": "paid_in_capital",
+     "label": "实收资本（或股本）"
+    },
+    {
+     "key": "capital_reserve",
+     "label": "资本公积"
+    },
+    {
+     "key": "treasury_stock",
+     "label": "库存股"
+    },
+    {
+     "key": "other_comprehensive_income_equity",
+     "label": "其他综合收益（权益）"
+    },
+    {
+     "key": "surplus_reserve",
+     "label": "盈余公积"
+    },
+    {
+     "key": "retained_earnings",
+     "label": "未分配利润"
+    },
+    {
+     "key": "total_equity_parent",
+     "label": "归属于母公司所有者权益合计"
+    },
+    {
+     "key": "minority_interest",
+     "label": "少数股东权益"
+    },
+    {
+     "key": "total_equity",
+     "label": "所有者权益合计"
+    }
+   ]
+  }
+ ],
+ "INCOME_STATEMENT_GROUPS": [
+  {
+   "key": "operating",
+   "label": "营业收支",
+   "fields": [
+    {
+     "key": "operating_revenue",
+     "label": "营业收入"
+    },
+    {
+     "key": "operating_cost",
+     "label": "营业成本"
+    },
+    {
+     "key": "taxes_and_surcharges",
+     "label": "税金及附加"
+    },
+    {
+     "key": "selling_expenses",
+     "label": "销售费用"
+    },
+    {
+     "key": "admin_expenses",
+     "label": "管理费用"
+    },
+    {
+     "key": "rd_expenses",
+     "label": "研发费用"
+    },
+    {
+     "key": "financial_expenses",
+     "label": "财务费用"
+    },
+    {
+     "key": "interest_income",
+     "label": "利息收入"
+    },
+    {
+     "key": "other_income",
+     "label": "其他收益"
+    },
+    {
+     "key": "investment_income",
+     "label": "投资收益"
+    },
+    {
+     "key": "fair_value_change_income",
+     "label": "公允价值变动收益"
+    },
+    {
+     "key": "credit_impairment_loss",
+     "label": "信用减值损失"
+    },
+    {
+     "key": "asset_impairment_loss",
+     "label": "资产减值损失"
+    },
+    {
+     "key": "asset_disposal_income",
+     "label": "资产处置收益"
+    },
+    {
+     "key": "operating_profit",
+     "label": "营业利润"
+    }
+   ]
+  },
+  {
+   "key": "non_operating",
+   "label": "营业外与利润",
+   "fields": [
+    {
+     "key": "non_operating_income",
+     "label": "营业外收入"
+    },
+    {
+     "key": "non_operating_expense",
+     "label": "营业外支出"
+    },
+    {
+     "key": "total_profit",
+     "label": "利润总额"
+    },
+    {
+     "key": "income_tax_expense",
+     "label": "所得税费用"
+    },
+    {
+     "key": "net_profit",
+     "label": "净利润"
+    },
+    {
+     "key": "net_profit_parent",
+     "label": "归属于母公司股东的净利润"
+    },
+    {
+     "key": "net_profit_minority",
+     "label": "少数股东损益"
+    },
+    {
+     "key": "other_comprehensive_income",
+     "label": "其他综合收益"
+    },
+    {
+     "key": "total_comprehensive_income",
+     "label": "综合收益总额"
+    }
+   ]
+  }
+ ],
+ "CASH_FLOW_GROUPS": [
+  {
+   "key": "operating",
+   "label": "经营活动",
+   "fields": [
+    {
+     "key": "cash_from_sales",
+     "label": "销售商品、提供劳务收到的现金"
+    },
+    {
+     "key": "tax_refunds_received",
+     "label": "收到的税费返还"
+    },
+    {
+     "key": "other_cash_received_operating",
+     "label": "收到其他与经营活动有关的现金"
+    },
+    {
+     "key": "cash_paid_for_goods",
+     "label": "购买商品、接受劳务支付的现金"
+    },
+    {
+     "key": "cash_paid_to_employees",
+     "label": "支付给职工以及为职工支付的现金"
+    },
+    {
+     "key": "taxes_paid",
+     "label": "支付的各项税费"
+    },
+    {
+     "key": "other_cash_paid_operating",
+     "label": "支付其他与经营活动有关的现金"
+    },
+    {
+     "key": "net_cash_flow_operating",
+     "label": "经营活动产生的现金流量净额"
+    }
+   ]
+  },
+  {
+   "key": "investing",
+   "label": "投资活动",
+   "fields": [
+    {
+     "key": "cash_from_investments",
+     "label": "收回投资收到的现金"
+    },
+    {
+     "key": "cash_from_investment_income",
+     "label": "取得投资收益收到的现金"
+    },
+    {
+     "key": "cash_from_asset_disposal",
+     "label": "处置固定资产等收回的现金净额"
+    },
+    {
+     "key": "cash_paid_for_assets",
+     "label": "购建固定资产等支付的现金"
+    },
+    {
+     "key": "cash_paid_for_investments",
+     "label": "投资支付的现金"
+    },
+    {
+     "key": "net_cash_flow_investing",
+     "label": "投资活动产生的现金流量净额"
+    }
+   ]
+  },
+  {
+   "key": "financing",
+   "label": "筹资活动与现金净增加",
+   "fields": [
+    {
+     "key": "cash_from_financing",
+     "label": "吸收投资/取得借款收到的现金"
+    },
+    {
+     "key": "cash_paid_for_debt",
+     "label": "偿还债务支付的现金"
+    },
+    {
+     "key": "cash_paid_for_dividends",
+     "label": "分配股利、利润或偿付利息支付的现金"
+    },
+    {
+     "key": "net_cash_flow_financing",
+     "label": "筹资活动产生的现金流量净额"
+    },
+    {
+     "key": "net_increase_in_cash",
+     "label": "现金及现金等价物净增加额"
+    }
+   ]
+  }
+ ],
+ "RATIO_DEFINITIONS": [
+  {
+   "key": "current_ratio",
+   "name": "流动比率",
+   "group": "偿债能力",
+   "unit": "ratio",
+   "description": "流动资产合计 / 流动负债合计"
+  },
+  {
+   "key": "quick_ratio",
+   "name": "速动比率",
+   "group": "偿债能力",
+   "unit": "ratio",
+   "description": "(流动资产合计 − 存货) / 流动负债合计"
+  },
+  {
+   "key": "cash_ratio",
+   "name": "现金比率",
+   "group": "偿债能力",
+   "unit": "ratio",
+   "description": "货币资金 / 流动负债合计"
+  },
+  {
+   "key": "debt_to_asset",
+   "name": "资产负债率",
+   "group": "偿债能力",
+   "unit": "percent",
+   "description": "负债合计 / 资产总计"
+  },
+  {
+   "key": "equity_ratio",
+   "name": "权益比率",
+   "group": "偿债能力",
+   "unit": "percent",
+   "description": "所有者权益合计 / 资产总计"
+  },
+  {
+   "key": "debt_to_equity",
+   "name": "产权比率",
+   "group": "偿债能力",
+   "unit": "ratio",
+   "description": "负债合计 / 所有者权益合计"
+  },
+  {
+   "key": "gross_margin",
+   "name": "毛利率",
+   "group": "盈利能力",
+   "unit": "percent",
+   "description": "(营业收入 − 营业成本) / 营业收入"
+  },
+  {
+   "key": "operating_margin",
+   "name": "营业利润率",
+   "group": "盈利能力",
+   "unit": "percent",
+   "description": "营业利润 / 营业收入"
+  },
+  {
+   "key": "net_margin",
+   "name": "净利率",
+   "group": "盈利能力",
+   "unit": "percent",
+   "description": "净利润 / 营业收入"
+  },
+  {
+   "key": "roe",
+   "name": "净资产收益率(ROE)",
+   "group": "盈利能力",
+   "unit": "percent",
+   "description": "归母净利/归母权益，缺省则 净利/权益合计"
+  },
+  {
+   "key": "roa",
+   "name": "总资产收益率(ROA)",
+   "group": "盈利能力",
+   "unit": "percent",
+   "description": "净利润 / 资产总计"
+  },
+  {
+   "key": "asset_turnover",
+   "name": "总资产周转率",
+   "group": "营运能力",
+   "unit": "ratio",
+   "description": "营业收入 / 资产总计"
+  },
+  {
+   "key": "ocfr",
+   "name": "经营现金流/营收",
+   "group": "现金流",
+   "unit": "percent",
+   "description": "经营活动现金流量净额 / 营业收入"
+  }
+ ],
+ "CORE_FIELDS": {
+  "balance": [
+   "monetary_funds",
+   "accounts_receivable",
+   "inventories",
+   "total_current_assets",
+   "total_assets",
+   "total_current_liabilities",
+   "total_liabilities",
+   "total_equity",
+   "paid_in_capital",
+   "retained_earnings"
+  ],
+  "income": [
+   "operating_revenue",
+   "operating_cost",
+   "net_profit"
+  ],
+  "cashflow": [
+   "net_cash_flow_operating"
+  ]
+ }
+}
