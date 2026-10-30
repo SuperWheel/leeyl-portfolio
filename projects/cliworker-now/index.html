@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI Worker Now · 李依伦作品集</title>
+  <meta name="description" content="DeepSeek Harness 多智能体协作插件：在主对话里派遣 Codex、Claude Code 等 13 种 AI CLI 分工协作，在侧栏统一查看。">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="prototype.css">
+  <script src="../../assets/js/site.js" defer></script>
+  <script src="prototype.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html">李依伦</a>
+      <nav class="nav">
+        <a href="../../index.html#works" aria-current="page">作品</a>
+        <a href="../../index.html#about" class="nav-text">关于我</a>
+        <a href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="切换深浅色">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="project-hero">
+      <p class="breadcrumb"><a href="../../index.html#works">作品</a> / CLI Worker Now</p>
+      <p class="eyebrow">开源插件 · 2026.10 至今</p>
+      <h1>CLI Worker Now</h1>
+      <p class="lead">DeepSeek Harness 的多智能体协作插件：在主对话里派遣 Codex、Claude Code 等 13 种 AI CLI 分工协作，每个 Worker 有名字、有角色，可以按名字续聊，过程在侧栏统一查看。</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://github.com/SuperWheel/dsh-cliworker-now" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+          项目主页（GitHub）
+        </a>
+        <a class="btn" href="#prototype">看交互原型</a>
+      </div>
+      <dl class="meta-list">
+        <div><dt>时间</dt><dd>2026.10 至今</dd></div>
+        <div><dt>我的角色</dt><dd>产品负责人（个人开源项目）</dd></div>
+        <div><dt>技术与平台</dt><dd>DeepSeek Harness 插件 · TypeScript / React · macOS / Windows</dd></div>
+        <div><dt>当前状态</dt><dd>持续迭代，最新正式版 v0.8.4</dd></div>
+      </dl>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">Overview</p>
+      <h2 class="section-title">项目简介</h2>
+      <div class="prose">
+        <p>我在 DeepSeek Harness（DSH）里把多个 AI CLI 当作子 Agent 使用时，遇到的问题很具体：每个 CLI 的对话散落在不同地方，谁在做什么、做到哪一步，很难追踪。动手之前，我横向调研了 herdr 等同类产品，看清楚这类工具各自怎么组织多个 Agent。</p>
+        <p>CLI Worker Now 把这些 CLI 接进 Harness：主对话负责派遣和接收结果，侧栏统一展示每个 Worker 的过程和状态。每个 Worker 有唯一的名字，可以套用角色预设；任务结束后，在主对话里点名就能接着做。CLI 仍使用各自的账号、模型和原生会话，插件只负责把它们组织起来。</p>
+      </div>
+    </section>
+
+    <section class="section" id="prototype">
+      <p class="eyebrow">Prototype</p>
+      <h2 class="section-title">交互原型</h2>
+      <p class="muted cw-guide">试试：点「派遣 Worker」选 CLI 和角色；派出后在侧栏点开卡片看过程，或在主对话输入“让代码审查员继续检查测试覆盖”按名字续聊。默认最多两个 Worker 同时运行，多派几个可以看到排队。</p>
+      <div class="stage">
+        <div class="mock-window cw-window" role="region" aria-label="CLI Worker Now 插件界面示意">
+          <div class="mock-titlebar"><i></i><i></i><i></i><span>DeepSeek Harness · CLI Worker Now</span></div>
+          <div class="cw-body">
+
+            <!-- 主对话 -->
+            <section class="cw-main" aria-label="主对话">
+              <div class="cw-main-head">
+                <strong class="cw-main-title">通过 CLI Worker 派遣智能体</strong>
+                <span class="cw-bg-count" id="cw-bg-count">0 个后台任务</span>
+              </div>
+              <div class="cw-tabs" aria-hidden="true"><span class="is-on">对话</span><span>轨迹</span></div>
+              <div class="cw-messages" id="cw-main-messages" aria-live="polite">
+                <div class="cw-empty-main">
+                  <p>主对话负责派遣和接收结果。</p>
+                  <p class="cw-dim">点下方「派遣 Worker」开始。</p>
+                </div>
+              </div>
+
+              <form class="cw-composer" id="cw-main-form" autocomplete="off">
+                <label class="cw-sr" for="cw-main-input">主对话输入</label>
+                <input class="cw-input" id="cw-main-input" type="text" placeholder="发消息或创建任务，/ 调用指令，@ 文件或对话">
+                <div class="cw-composer-row">
+                  <div class="cw-pop-wrap">
+                    <button type="button" class="cw-chip cw-chip-accent" id="cw-dispatch-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="cw-dispatch">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                      派遣 Worker
+                    </button>
+                  </div>
+                  <div class="cw-pop-wrap">
+                    <button type="button" class="cw-chip" id="cw-main-perm-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="cw-main-perm-menu">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 2.8 3.9v3.6c0 3.1 2.2 5.6 5.2 6.7 3-1.1 5.2-3.6 5.2-6.7V3.9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                      <span id="cw-main-perm-label">工作区内修改</span>
+                      <svg class="cw-caret" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                    <div class="cw-menu" id="cw-main-perm-menu" role="menu" aria-label="主对话权限" hidden></div>
+                  </div>
+                  <button type="submit" class="cw-send" aria-label="发送">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>
+
+                <!-- 派遣菜单 -->
+                <div class="cw-dispatch" id="cw-dispatch" role="dialog" aria-label="派遣 Worker" hidden>
+                  <div class="cw-dispatch-head">
+                    <strong>派遣 Worker</strong>
+                    <button type="button" class="cw-icon-btn" data-close-dispatch aria-label="关闭">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+                  <p class="cw-dispatch-note">示意入口。真实产品中在主对话里点名 CLI，再通过问题卡片依次确认模型、思考强度和角色。</p>
+                  <fieldset class="cw-field">
+                    <legend>CLI</legend>
+                    <div class="cw-cli-grid" id="cw-cli-options"></div>
+                  </fieldset>
+                  <fieldset class="cw-field">
+                    <legend>智能体预设</legend>
+                    <div class="cw-role-list" id="cw-role-options"></div>
+                  </fieldset>
+                  <div class="cw-field-row">
+                    <label class="cw-field">
+                      <span class="cw-legend">智能体名称</span>
+                      <input class="cw-input cw-input-sm" id="cw-name-input" type="text" maxlength="12">
+                    </label>
+                    <label class="cw-field">
+                      <span class="cw-legend">任务</span>
+                      <input class="cw-input cw-input-sm" id="cw-task-input" type="text" maxlength="24">
+                    </label>
+                  </div>
+                  <p class="cw-error" id="cw-dispatch-error" role="alert"></p>
+                  <div class="cw-dispatch-actions">
+                    <button type="button" class="cw-btn" data-close-dispatch>取消</button>
+                    <button type="button" class="cw-btn cw-btn-primary" id="cw-dispatch-go">派遣</button>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <!-- CLI Worker 侧栏 -->
+            <aside class="cw-side" aria-label="CLI Worker 侧栏">
+              <!-- 列表视图 -->
+              <div class="cw-view" id="cw-list-view">
+                <div class="cw-side-head">
+                  <span class="cw-logo" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="2" y="2" width="16" height="16" rx="4" fill="currentColor"/><rect x="5.5" y="5.5" width="3" height="9" rx="1" fill="var(--surface)"/><rect x="10" y="5.5" width="4.5" height="4" rx="1" fill="var(--surface)"/><rect x="10" y="11" width="4.5" height="3.5" rx="1" fill="var(--surface)"/></svg></span>
+                  <strong>CLI Worker</strong>
+                  <span class="cw-now">NOW</span>
+                </div>
+                <label class="cw-search">
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="cw-sr">搜索智能体</span>
+                  <input type="search" id="cw-search" placeholder="搜索智能体、话题或模型…">
+                </label>
+                <div class="cw-filters" role="group" aria-label="任务状态筛选">
+                  <button type="button" data-filter="all" aria-pressed="true">全部</button>
+                  <button type="button" data-filter="active" aria-pressed="false">进行中</button>
+                  <button type="button" data-filter="completed" aria-pressed="false">已完成</button>
+                  <button type="button" data-filter="attention" aria-pressed="false">异常</button>
+                </div>
+                <div class="cw-groups" id="cw-groups"></div>
+              </div>
+
+              <!-- 详情视图 -->
+              <div class="cw-view" id="cw-detail-view" hidden>
+                <div class="cw-detail-head">
+                  <button type="button" class="cw-icon-btn" id="cw-back" aria-label="返回子 Agent 列表">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4 3.5 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <strong id="cw-detail-title"></strong>
+                </div>
+                <div class="cw-messages cw-detail-messages" id="cw-detail-messages" aria-live="polite"></div>
+                <form class="cw-composer cw-composer-side" id="cw-detail-form" autocomplete="off">
+                  <label class="cw-sr" for="cw-detail-input">CLI Worker 消息输入</label>
+                  <input class="cw-input" id="cw-detail-input" type="text" placeholder="给这个子 Agent 分配下一步…">
+                  <div class="cw-composer-row">
+                    <div class="cw-pop-wrap">
+                      <button type="button" class="cw-chip" id="cw-worker-perm-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="cw-worker-perm-menu">
+                        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 2.8 3.9v3.6c0 3.1 2.2 5.6 5.2 6.7 3-1.1 5.2-3.6 5.2-6.7V3.9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                        <span id="cw-worker-perm-label"></span>
+                        <svg class="cw-caret" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                      </button>
+                      <div class="cw-menu cw-menu-up" id="cw-worker-perm-menu" role="menu" aria-label="Worker 权限" hidden></div>
+                    </div>
+                    <button type="button" class="cw-chip" id="cw-stop" hidden>停止</button>
+                    <button type="submit" class="cw-send" aria-label="发送">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                  </div>
+                </form>
+                <div class="cw-statusbar" id="cw-detail-status"></div>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+      </div>
+      <p class="stage-note">示意原型：只还原界面与交互，不连接真实功能。</p>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">Decision</p>
+      <h2 class="section-title">方案转向：从自绘对话页到桥接原生会话</h2>
+      <div class="prose">
+        <p>第一版能跑起来，但用下来发现方向不对。我没有在原方案上继续打补丁，而是重新评估后换了实现路线。</p>
+      </div>
+      <ol class="cw-timeline">
+        <li><time>2026-10-04</time><strong>MVP：用 JSON 流式输出自绘对话页</strong><span>读取各 CLI 的 JSON 流式输出，在插件里自己画一套对话界面，先验证“主对话派遣 + 侧栏查看”这件事成立。</span></li>
+        <li><time>2026-10-06</time><strong>首个 Release v0.6.5</strong><span>第一个正式版本在 GitHub 开源发布。</span></li>
+        <li><time>使用中暴露的问题</time><strong>自绘页面越做越吃力</strong><span>问题集中在四点，见下方对照。</span></li>
+        <li><time>2026-10-18</time><strong>v0.8.1：改为桥接 Harness 原生会话</strong><span>参考 codex-host、Codingns4DSH 两个项目的做法，让每个 Worker 直接使用 Harness 原生的对话视图。</span></li>
+      </ol>
+      <div class="grid grid-2 cw-compare">
+        <div class="card">
+          <p class="cw-compare-tag">MVP · 自绘对话页</p>
+          <ul class="point-list">
+            <li><strong>难以还原 CLI 的工作状态：</strong>流式输出里的信息，拼不回 CLI 原本的工作过程。</li>
+            <li><strong>不能插入图片或文件：</strong>用户没法把图片、文件交给 CLI 读取。</li>
+            <li><strong>与原生对话页有差距：</strong>交互和观感总是和 Harness 自己的对话页差一截。</li>
+            <li><strong>维护负担大：</strong>每多一个功能，就要在自绘页面里再实现一遍。</li>
+          </ul>
+        </div>
+        <div class="card cw-compare-after">
+          <p class="cw-compare-tag">v0.8.1 · 桥接原生会话</p>
+          <ul class="point-list">
+            <li><strong>界面交给宿主：</strong>子会话直接使用 Harness 的对话视图、输入框、模型与权限控件和“+”菜单。</li>
+            <li><strong>能力跟着原生走：</strong>图片和文件可以通过原生输入框交给 CLI，排队、停止和结束后续聊与原生一致。</li>
+            <li><strong>插件专注组织：</strong>插件只负责派遣、命名、角色、权限和状态汇总，不再重复造对话页。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">What I did</p>
+      <h2 class="section-title">我做了什么</h2>
+      <ul class="point-list">
+        <li><strong>问题定义：</strong>从自己在 Harness 中把多个 AI CLI 当作子 Agent 使用时“对话分散、进展难追踪”的痛点出发，明确要解决的问题；前期横向调研了 herdr 等同类产品。</li>
+        <li><strong>需求与 PRD：</strong>与 AI Agent 协作撰写 PRD，梳理用户问题、功能范围、权限规则与验收标准；开发中用 OpenSpec 管理 22 份能力规格、164 条需求、527 个验收场景。</li>
+        <li><strong>方案决策：</strong>MVP 暴露问题后，评估自绘对话页的四个短板，决定改为桥接 Harness 原生会话，并随 v0.8.1 发布。</li>
+        <li><strong>组织 AI Agent 协作开发：</strong>把开发任务交给 AI Agent 执行，按能力规格和验收场景对照实现结果。</li>
+        <li><strong>发布与验收：</strong>从首个 Release v0.6.5 到 v0.8.4 共发布 10 个正式版本；v0.8.4 的 macOS 自动回归 4,702 项通过、0 失败，Windows 全量回归仍有失败项，单独记录、继续跟进。</li>
+        <li><strong>用户反馈与运营：</strong>按自身需求与外部 Issue 排期；7 个外部 Issue 全部关闭，从提出到关闭中位约 1 天；发布 5 篇介绍与教程，建立了用户交流群。</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">Numbers</p>
+      <h2 class="section-title">关键数据</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">13 种</div><div class="stat-label">可派遣的 AI CLI</div></div>
+        <div class="stat"><div class="stat-value">10 个</div><div class="stat-label">正式版本（v0.6.5 – v0.8.4）</div></div>
+        <div class="stat"><div class="stat-value">22 / 164 / 527</div><div class="stat-label">OpenSpec 能力规格 / 需求 / 验收场景</div></div>
+        <div class="stat"><div class="stat-value">4,702</div><div class="stat-label">v0.8.4 macOS 自动回归通过项，0 失败</div></div>
+        <div class="stat"><div class="stat-value">29</div><div class="stat-label">GitHub stars</div></div>
+        <div class="stat"><div class="stat-value">2,300+</div><div class="stat-label">下载次数（npm 1,527 + 安装包 796）</div></div>
+        <div class="stat"><div class="stat-value">7 / 7</div><div class="stat-label">外部 Issue 已关闭，中位约 1 天</div></div>
+        <div class="stat"><div class="stat-value">1.3 万+</div><div class="stat-label">5 篇介绍与教程的浏览量</div></div>
+      </div>
+      <p class="muted cw-data-note">数据取自 2026-10-30；下载次数不等于用户数。</p>
+    </section>
+
+    <nav class="pager" aria-label="其他作品">
+      <a href="../financial-analysis/index.html"><small>上一个作品</small>财务分析系统</a>
+      <a class="next" href="../visible-workflow/index.html"><small>下一个作品</small>Visible Workflow</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 李依伦</span>
+      <span><a href="mailto:liyilun200212@163.com">liyilun200212@163.com</a> · <a href="https://github.com/SuperWheel" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </footer>
+</body>
+</html>
