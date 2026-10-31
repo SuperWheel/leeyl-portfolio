@@ -76,7 +76,7 @@
         <div class="card"><small>问题 3</small><strong>改长流程容易改偏</strong><p>用自然语言描述修改，定位不准，改动范围容易超出预期。</p></div>
         <div class="card"><small>问题 4</small><strong>做法留不下来</strong><p>一次任务的执行方法难以保留，下次同类任务还要重新摸索。</p></div>
       </div>
-      <p class="source-note">问题来源：PRD v0.4 设计讨论稿。</p>
+      <p class="source-note">问题来源：PRD v0.0.1 设计讨论稿。</p>
     </section>
 
     <section class="section story" style="padding-top:0">
@@ -88,7 +88,7 @@
       </div>
       <ol class="story-list">
         <li><span class="story-no">01</span><h3>需求定义</h3><p>梳理 Agent 长任务里“看不清、画不动、改不准、留不下”四个问题，提出产品思路，并把它定位为运行在 DeepSeek Harness 中、基于 Graphon 执行的插件。</p></li>
-        <li><span class="story-no">02</span><h3>需求文档</h3><p>与 AI Agent 协作撰写 2 版 PRD：v0.4 设计讨论稿（2026-10-14）提出问题与交互设想；v2.0 需求整合稿（2026-10-16）结合三方竞品横向对比确定方案，按 P0—P2 分期规划交付，设 36 项验收编号（AC-01～AC-36）。</p></li>
+        <li><span class="story-no">02</span><h3>需求文档</h3><p>与 AI Agent 协作撰写 2 版 PRD：v0.0.1 设计讨论稿（2026-10-14）提出问题与交互设想；v0.0.2 需求整合稿（2026-10-16）结合三方竞品横向对比确定方案，按 P0—P2 分期规划交付，设 36 项验收编号（AC-01～AC-36）。</p></li>
         <li><span class="story-no">03</span><h3>先试后建</h3><p>让 Agent 先真实试做、跑通后再拆成流程，由试做记录自动生成流程骨架与草稿，避免先凭空设计一张跑不通的图。</p></li>
         <li><span class="story-no">04</span><h3>标准模板</h3><p>把节点配置固化为模板，AI 只填业务字段，由后端校验。受控对照中两组各 40 次均成功，模型请求 80→40，修复次数 14→0，Token 约降 52%；对照组是项目内另一方案，耗时未稳定达标，未计入上述结果。</p></li>
         <li><span class="story-no">05</span><h3>变更审核</h3><p>修改流程先生成待接受的提案，校验版本与固定节点；审核先于写入，退回时目标文件不变。</p></li>
@@ -100,7 +100,7 @@
     <section class="section" style="padding-top:0">
       <div class="section-head"><h2 class="section-title">关键数据</h2></div>
       <div class="stats stats-3">
-        <div class="stat"><div class="stat-value">2 版</div><div class="stat-label">PRD：v0.4 讨论稿、v2.0 整合稿</div></div>
+        <div class="stat"><div class="stat-value">2 版</div><div class="stat-label">PRD：v0.0.1 讨论稿、v0.0.2 整合稿</div></div>
         <div class="stat"><div class="stat-value">36 项</div><div class="stat-label">验收编号 AC-01～AC-36</div></div>
         <div class="stat"><div class="stat-value">80→40</div><div class="stat-label">模型请求次数（受控对照）</div></div>
         <div class="stat"><div class="stat-value">14→0</div><div class="stat-label">修复次数（受控对照）</div></div>
